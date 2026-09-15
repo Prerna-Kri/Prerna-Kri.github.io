@@ -1,164 +1,118 @@
 /**
- * Client island for Publication Filtering per §6.2, §7.3 & §10.
+ * Work & Writing Filter Island (§7.3, §10)
  * Server-rendered first, progressive enhancement with URL query state,
  * FLIP reflow animation, and aria-live announcements.
  */
 
-export function initPublicationFilter(): void {
-  const filterContainer = document.getElementById('pub-filter-controls');
-  if (!filterContainer) return;
+export function initWorkFilter(): void {
+  const container = document.getElementById('work-filter-controls');
+  if (!container) return;
 
   const typeButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-type]');
-  const topicButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-topic]');
-  const sortButton = document.getElementById('pub-sort-toggle') as HTMLButtonElement | null;
-  const searchInput = document.getElementById('pub-search-input') as HTMLInputElement | null;
-  const liveRegion = document.getElementById('pub-results-live');
-  const pubRows = Array.from(document.querySelectorAll<HTMLElement>('.pub-row'));
-  const yearSections = Array.from(document.querySelectorAll<HTMLElement>('.pub-year-group'));
+  const stackButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-stack]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.work-card'));
+  const liveRegion = document.getElementById('work-results-live');
 
   let currentType = 'all';
-  let currentTopic = 'all';
-  let currentSort: 'newest' | 'oldest' = 'newest';
-  let currentQuery = '';
+  let currentStack = 'all';
 
-  // 1. Restore state from URL query params
   function readParams() {
     const params = new URLSearchParams(window.location.search);
     currentType = params.get('type') || 'all';
-    currentTopic = params.get('topic') || 'all';
-    currentSort = (params.get('sort') as 'newest' | 'oldest') || 'newest';
-    currentQuery = params.get('q') || '';
-
-    if (searchInput) searchInput.value = currentQuery;
-    updateButtonStates();
+    currentStack = params.get('stack') || 'all';
+    updateButtons();
+    applyFilter(false);
   }
 
-  // 2. Write state to URL without reloading
   function writeParams() {
     const params = new URLSearchParams();
     if (currentType !== 'all') params.set('type', currentType);
-    if (currentTopic !== 'all') params.set('topic', currentTopic);
-    if (currentSort !== 'newest') params.set('sort', currentSort);
-    if (currentQuery.trim()) params.set('q', currentQuery.trim());
+    if (currentStack !== 'all') params.set('stack', currentStack);
 
     const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
     window.history.replaceState(null, '', newUrl);
   }
 
-  function updateButtonStates() {
+  function updateButtons() {
     typeButtons.forEach((btn) => {
       const active = btn.getAttribute('data-filter-type') === currentType;
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-      btn.classList.toggle('active-filter', active);
-    });
-
-    topicButtons.forEach((btn) => {
-      const active = btn.getAttribute('data-filter-topic') === currentTopic;
-      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-      btn.classList.toggle('active-filter', active);
-    });
-
-    if (sortButton) {
-      sortButton.setAttribute('data-sort', currentSort);
-      const sortLabel = sortButton.querySelector('.sort-label');
-      if (sortLabel) {
-        sortLabel.textContent = currentSort === 'newest' ? 'Newest First' : 'Oldest First';
+      if (active) {
+        btn.classList.add('bg-[var(--interactive)]', 'text-[#120722]', 'border-[var(--interactive)]');
+        btn.classList.remove('bg-[var(--bg-well)]', 'text-[var(--text-muted)]');
+      } else {
+        btn.classList.remove('bg-[var(--interactive)]', 'text-[#120722]', 'border-[var(--interactive)]');
+        btn.classList.add('bg-[var(--bg-well)]', 'text-[var(--text-muted)]');
       }
-    }
+    });
+
+    stackButtons.forEach((btn) => {
+      const active = btn.getAttribute('data-filter-stack') === currentStack;
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      if (active) {
+        btn.classList.add('bg-[var(--interactive)]', 'text-[#120722]', 'border-[var(--interactive)]');
+        btn.classList.remove('bg-[var(--bg-well)]', 'text-[var(--text-muted)]');
+      } else {
+        btn.classList.remove('bg-[var(--interactive)]', 'text-[#120722]', 'border-[var(--interactive)]');
+        btn.classList.add('bg-[var(--bg-well)]', 'text-[var(--text-muted)]');
+      }
+    });
   }
 
-  // 3. FLIP Filter & Reflow Execution
-  function applyFilters() {
-    const q = currentQuery.toLowerCase().trim();
+  function applyFilter(animate = true) {
     let visibleCount = 0;
 
-    // First: capture initial positions
-    const firstPositions = new Map<HTMLElement, DOMRect>();
-    pubRows.forEach((row) => {
-      firstPositions.set(row, row.getBoundingClientRect());
-    });
-
-    // Match filtering
-    pubRows.forEach((row) => {
-      const type = row.dataset.pubType || '';
-      const topics = (row.dataset.pubTopics || '').split(',');
-      const rowText = (row.textContent || '').toLowerCase();
+    cards.forEach((card) => {
+      const type = card.dataset.projectType || '';
+      const stack = (card.dataset.projectStack || '').split(',');
 
       const matchType = currentType === 'all' || type === currentType;
-      const matchTopic = currentTopic === 'all' || topics.includes(currentTopic);
-      const matchQuery = !q || rowText.includes(q);
+      const matchStack = currentStack === 'all' || stack.includes(currentStack);
 
-      const isVisible = matchType && matchTopic && matchQuery;
+      const isVisible = matchType && matchStack;
 
       if (isVisible) {
         visibleCount++;
-        row.style.display = '';
-        row.classList.remove('opacity-0', 'scale-98');
-        row.classList.add('opacity-100', 'scale-100');
+        card.style.display = '';
+        if (animate) {
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+        }
       } else {
-        row.classList.add('opacity-0', 'scale-98');
-        row.classList.remove('opacity-100', 'scale-100');
-        row.style.display = 'none';
+        if (animate) {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.98)';
+          setTimeout(() => {
+            if (card.style.opacity === '0') card.style.display = 'none';
+          }, 240);
+        } else {
+          card.style.display = 'none';
+        }
       }
     });
 
-    // Hide empty year headers
-    yearSections.forEach((section) => {
-      const visibleChildren = section.querySelectorAll('.pub-row:not([style*="display: none"])');
-      section.style.display = visibleChildren.length > 0 ? '' : 'none';
-    });
-
-    // Reorder year sections if sort is oldest
-    const container = document.getElementById('pub-list-container');
-    if (container && yearSections.length > 1) {
-      const sortedSections = [...yearSections].sort((a, b) => {
-        const yearA = parseInt(a.dataset.year || '0', 10);
-        const yearB = parseInt(b.dataset.year || '0', 10);
-        return currentSort === 'newest' ? yearB - yearA : yearA - yearB;
-      });
-      sortedSections.forEach((sec) => container.appendChild(sec));
-    }
-
-    // Announce count in live region for screen readers per §10
     if (liveRegion) {
-      liveRegion.textContent = `Showing ${visibleCount} of ${pubRows.length} publications`;
+      liveRegion.textContent = `Showing ${visibleCount} of ${cards.length} projects`;
     }
-
-    writeParams();
   }
 
-  // Bind event listeners
   typeButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       currentType = btn.getAttribute('data-filter-type') || 'all';
-      updateButtonStates();
-      applyFilters();
+      writeParams();
+      updateButtons();
+      applyFilter(true);
     });
   });
 
-  topicButtons.forEach((btn) => {
+  stackButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      currentTopic = btn.getAttribute('data-filter-topic') || 'all';
-      updateButtonStates();
-      applyFilters();
+      currentStack = btn.getAttribute('data-filter-stack') || 'all';
+      writeParams();
+      updateButtons();
+      applyFilter(true);
     });
   });
-
-  if (sortButton) {
-    sortButton.addEventListener('click', () => {
-      currentSort = currentSort === 'newest' ? 'oldest' : 'newest';
-      updateButtonStates();
-      applyFilters();
-    });
-  }
-
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      currentQuery = searchInput.value;
-      applyFilters();
-    });
-  }
 
   readParams();
-  applyFilters();
 }

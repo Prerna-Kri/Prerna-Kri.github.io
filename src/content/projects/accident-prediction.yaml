@@ -1,0 +1,14 @@
+name: "Road Accident Prediction & Severity Analysis"
+slug: "road-accident-prediction"
+summary: "Predictive analytics framework for modeling road accident probabilities and severity factors."
+description: "Engineered predictive models to analyze traffic collision severity from geographical, environmental, and traffic density data to identify risk factors and support safety interventions."
+type: "research"
+stack:
+  - "Python"
+  - "Scikit-Learn"
+  - "Pandas"
+role: "Lead Developer"
+status: "active"
+year: 2024
+repo: "https://github.com/Prerna-Kri"
+featured: true

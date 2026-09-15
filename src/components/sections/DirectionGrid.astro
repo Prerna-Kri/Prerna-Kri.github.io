@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/paths';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const directions = await getCollection('directions');
+const sorted = directions.sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+
+const RAMP_COLORS = [
+  'var(--color-plasma-1, #FF2E8B)',
+  'var(--color-plasma-2, #FF5C4D)',
+  'var(--color-plasma-3, #FF9E1F)',
+];
+---
+
+<section id="focus" class={`py-[var(--section-pad)] ${className}`} aria-labelledby="focus-heading">
+  <div class="frame">
+    <div class="mb-12">
+      <h2 id="focus-heading" class="text-[var(--step-3)] font-bold text-[var(--text-heading)] tracking-tight">
+        Focus
+      </h2>
+      <p class="font-mono text-[var(--step--1)] text-[var(--text-muted)] mt-1">
+        Core research directions
+      </p>
+    </div>
+
+    <!-- Three columns ≥1024px, 1 below (§7.1) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+      {
+        sorted.map((item, index) => {
+          const rampColor = RAMP_COLORS[index % RAMP_COLORS.length]!;
+          const anchorHref = withBase(`/research#${item.data.slug}`);
+
+          return (
+            <div
+              class="flex flex-col justify-between pt-6 group"
+              style={`border-top: 2px solid ${rampColor};`}
+            >
+              <div class="space-y-4">
+                <!-- Two-to-four-word name in Archivo at --step-3 -->
+                <h3
+                  class="text-[var(--step-2)] sm:text-[var(--step-3)] font-bold text-[var(--text-heading)] group-hover:text-[var(--interactive)] transition-colors leading-tight"
+                  style="font-family: var(--font-display); font-weight: 700;"
+                >
+                  <a href={anchorHref} class="hover:underline">
+                    {item.data.title}
+                  </a>
+                </h3>
+
+                <!-- Plain language description -->
+                <p class="text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
+                  {item.data.blurb}
+                </p>
+              </div>
+
+              <div class="mt-8 pt-4 border-t border-[var(--border-hairline)] space-y-4">
+                <!-- Mono tags for methods -->
+                <div class="flex flex-wrap gap-2">
+                  {
+                    item.data.methods.map((method) => (
+                      <span class="font-mono text-[var(--step--1)] text-[var(--text-muted)] bg-[var(--bg-well)] px-2 py-0.5 rounded-[4px] border border-[var(--border-hairline)]">
+                        {method}
+                      </span>
+                    ))
+                  }
+                </div>
+
+                <!-- Link to anchor on /research -->
+                <div>
+                  <a
+                    href={anchorHref}
+                    class="link-volt text-[var(--step--1)] font-medium inline-flex items-center gap-1"
+                  >
+                    <span>Read research scope &rarr;</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

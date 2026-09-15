@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/common/TableOfContents.astro';
 import { formatDate } from '../lib/dates';
 import { withBase } from '../lib/paths';
 import '../styles/prose.css';
@@ -41,115 +42,109 @@ const jsonLd = {
     name: 'Prerna Kumari',
   },
 };
+
+const tocHeadings = headings
+  .filter((h) => h.depth <= 3)
+  .map((h) => ({ id: h.slug, label: h.text }));
 ---
 
 <BaseLayout title={title} description={description} type="article" jsonLd={jsonLd}>
-  <!-- Sticky reading progress bar at top of viewport per §7.7 -->
+  <!-- Sticky 2px reading progress bar in the ramp pinned to top of viewport per §7.6 -->
   <div class="fixed top-0 left-0 right-0 z-50 h-[2px] bg-transparent pointer-events-none" aria-hidden="true">
-    <div id="reading-progress-bar" class="h-full w-0 bg-[var(--accent-signal)] transition-all duration-75"></div>
+    <div
+      id="reading-progress-bar"
+      class="h-full w-0 transition-all duration-75"
+      style="background: linear-gradient(90deg, var(--accent-plasma-1), var(--accent-plasma-2), var(--accent-plasma-3), var(--accent-plasma-4));"
+    ></div>
   </div>
 
-  <div class="grid grid-cols-1 xl:grid-cols-12 gap-12 py-12 md:py-16">
-    <!-- Main article container in columns 2-9 per §4.5 -->
-    <article class="xl:col-start-2 xl:col-span-8 space-y-8 max-w-[68ch]">
-      <header class="space-y-4 border-b border-[var(--border-subtle)] pb-8">
-        <div class="flex flex-wrap items-center gap-3 text-[var(--step--1)] font-mono text-[var(--text-muted)]">
-          <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
-          <span>·</span>
-          <span>{readingTime}</span>
-        </div>
-
-        <h1 class="font-display text-[var(--step-4)] text-[var(--text-heading)] leading-tight">
-          {title}
-        </h1>
-
-        <p class="text-[var(--step-0)] text-[var(--text-muted)]">
-          {description}
-        </p>
-
-        {tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 pt-2">
-            {tags.map((tag) => (
-              <span class="font-mono text-[11px] px-2 py-0.5 rounded-[3px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)]">
-                #{tag}
-              </span>
-            ))}
+  <div class="frame pt-28 pb-20">
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+      <!-- Main article container (70ch measure per §7.6) -->
+      <article class="xl:col-span-8 space-y-8 max-w-[70ch]">
+        <header class="space-y-4 border-b border-[var(--border-hairline)] pb-8">
+          <div class="flex flex-wrap items-center gap-3 text-[var(--step--1)] font-mono text-[var(--text-muted)]">
+            <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
+            <span>·</span>
+            <span>{readingTime}</span>
           </div>
-        )}
-      </header>
 
-      <!-- Post Body (MDX) -->
-      <div class="prose">
-        <slot />
-      </div>
-
-      <!-- Prev / Next Navigation per §7.7 -->
-      <nav aria-label="Post navigation" class="mt-16 pt-8 border-t border-[var(--border-subtle)] grid grid-cols-1 sm:grid-cols-2 gap-6 font-mono text-xs">
-        {prevPost ? (
-          <a
-            href={withBase(`/writing/${prevPost.slug}`)}
-            class="p-4 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-signal)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors flex flex-col gap-1"
+          <h1
+            class="text-[var(--step-3)] sm:text-[var(--step-4)] font-bold text-[var(--text-heading)] leading-tight tracking-tight"
+            style="font-family: var(--font-display); font-weight: 700;"
           >
-            <span class="text-[10px] uppercase text-[var(--accent-signal)]">← Previous Post</span>
-            <span class="font-sans font-medium text-sm text-[var(--text-heading)]">{prevPost.title}</span>
-          </a>
-        ) : <div />}
+            {title}
+          </h1>
 
-        {nextPost ? (
-          <a
-            href={withBase(`/writing/${nextPost.slug}`)}
-            class="p-4 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--accent-signal)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors flex flex-col gap-1 text-right sm:col-start-2"
-          >
-            <span class="text-[10px] uppercase text-[var(--accent-signal)]">Next Post →</span>
-            <span class="font-sans font-medium text-sm text-[var(--text-heading)]">{nextPost.title}</span>
-          </a>
-        ) : <div />}
-      </nav>
-    </article>
+          <p class="text-[var(--step-0)] text-[var(--text-body)]">
+            {description}
+          </p>
 
-    <!-- Marginal Sticky Table of Contents at xl and above per §7.7 -->
-    {headings.length > 0 && (
-      <aside class="hidden xl:block xl:col-span-3">
-        <div class="sticky top-28 space-y-3 font-mono text-xs p-4 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50">
-          <div class="text-[10px] tracking-wider uppercase text-[var(--text-muted)] font-semibold border-b border-[var(--border-subtle)] pb-2">
-            Table of Contents
-          </div>
-          <nav aria-label="Table of contents">
-            <ul class="space-y-2">
-              {headings.filter((h) => h.depth <= 3).map((h) => (
-                <li class={h.depth === 3 ? 'pl-3 text-[11px]' : ''}>
-                  <a
-                    href={`#${h.slug}`}
-                    class="text-[var(--text-muted)] hover:text-[var(--accent-signal)] transition-colors line-clamp-1"
-                  >
-                    {h.text}
-                  </a>
-                </li>
+          {tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 pt-2">
+              {tags.map((tag) => (
+                <span class="font-mono text-xs px-2 py-0.5 rounded-[4px] bg-[var(--bg-well)] border border-[var(--border-hairline)] text-[var(--text-muted)]">
+                  #{tag}
+                </span>
               ))}
-            </ul>
-          </nav>
+            </div>
+          )}
+        </header>
+
+        <!-- Post Body (MDX with KaTeX & Shiki) -->
+        <div class="prose">
+          <slot />
         </div>
-      </aside>
-    )}
+
+        <!-- Prev / Next Navigation per §7.6 -->
+        <nav aria-label="Post navigation" class="mt-16 pt-8 border-t border-[var(--border-hairline)] grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
+          {prevPost ? (
+            <a
+              href={withBase(`/writing/${prevPost.slug}`)}
+              class="p-4 rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-well)] hover:border-[var(--interactive)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors flex flex-col gap-1"
+            >
+              <span class="font-mono text-[10px] uppercase text-[var(--interactive)]">&larr; Previous</span>
+              <span class="font-medium text-sm text-[var(--text-heading)]">{prevPost.title}</span>
+            </a>
+          ) : <div />}
+
+          {nextPost ? (
+            <a
+              href={withBase(`/writing/${nextPost.slug}`)}
+              class="p-4 rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-well)] hover:border-[var(--interactive)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors flex flex-col gap-1 text-right"
+            >
+              <span class="font-mono text-[10px] uppercase text-[var(--interactive)]">Next &rarr;</span>
+              <span class="font-medium text-sm text-[var(--text-heading)]">{nextPost.title}</span>
+            </a>
+          ) : <div />}
+        </nav>
+      </article>
+
+      <!-- Margin Table of Contents at xl+ per §7.6 -->
+      {tocHeadings.length > 0 && (
+        <aside class="hidden xl:block xl:col-span-4">
+          <div class="sticky top-28 space-y-4 max-w-[280px]">
+            <div class="font-mono text-xs uppercase text-[var(--text-muted)] tracking-wider">
+              Outline
+            </div>
+            <TableOfContents headings={tocHeadings} />
+          </div>
+        </aside>
+      )}
+    </div>
   </div>
 </BaseLayout>
 
 <script>
-  function setupReadingProgress() {
+  function updateReadingProgress() {
     const bar = document.getElementById('reading-progress-bar');
     if (!bar) return;
 
-    function update() {
-      const scrollY = window.scrollY;
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = total > 0 ? Math.min(100, Math.max(0, (scrollY / total) * 100)) : 0;
-      bar!.style.width = `${progress}%`;
-    }
-
-    window.addEventListener('scroll', update, { passive: true });
-    update();
+    const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollTotal > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollTotal)) : 0;
+    bar.style.width = `${progress * 100}%`;
   }
 
-  setupReadingProgress();
-  document.addEventListener('astro:page-load', setupReadingProgress);
+  window.addEventListener('scroll', updateReadingProgress, { passive: true });
+  document.addEventListener('astro:page-load', updateReadingProgress);
 </script>

@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import { site } from '../../config/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const allPubs = await getCollection('publications');
+const hasPubs = allPubs.length > 0;
+---
+
+{
+  hasPubs && (
+    <section id="publications" class={`py-[var(--section-pad)] ${className}`} aria-labelledby="pubs-heading">
+      <div class="frame space-y-12">
+        <div class="mb-12">
+          <h2 id="pubs-heading" class="text-[var(--step-3)] font-bold text-[var(--text-heading)] tracking-tight">
+            Publications
+          </h2>
+          <p class="font-mono text-[var(--step--1)] text-[var(--text-muted)] mt-1">
+            Peer-reviewed papers, workshops, and preprints
+          </p>
+        </div>
+
+        <div class="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
+          {allPubs.map((pub) => (
+            <article class="py-8 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-baseline">
+              <div class="md:col-span-3">
+                <span class="font-mono text-[var(--step-1)] text-[var(--text-muted)] font-semibold">
+                  {pub.data.year}
+                </span>
+              </div>
+              <div class="md:col-span-9 space-y-2">
+                <h3 class="text-[var(--step-1)] font-bold text-[var(--text-heading)] leading-snug">
+                  {pub.data.title}
+                </h3>
+                <p class="text-[var(--step--1)] text-[var(--text-muted)]">
+                  {pub.data.authors.map((author: string, idx: number) => (
+                    <span class={author === site.name ? 'text-[var(--text-heading)] font-semibold' : 'text-[var(--text-muted)]'}>
+                      {author}{idx < pub.data.authors.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
+                </p>
+                <p class="font-mono text-xs text-[var(--interactive)]">
+                  {pub.data.venue}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

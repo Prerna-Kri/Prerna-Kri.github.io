@@ -1,0 +1,90 @@
+---
+import { site } from '../../config/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+// "Prerna Kumari" is 13 characters. On desktop/tablet single line, on small screens (<480px) two tspans.
+const firstName = site.firstName;
+const lastName = site.name.replace(site.firstName, '').trim();
+---
+
+<div class={`relative w-full overflow-hidden ${className}`}>
+  <!-- Fallback visually hidden accessible heading -->
+  <h1 class="sr-only">{site.name} — {site.role}, {site.institution}</h1>
+
+  <svg
+    id="hero-name-svg"
+    class="w-full h-auto block select-text"
+    viewBox="0 0 1000 240"
+    preserveAspectRatio="xMidYMid meet"
+    role="img"
+    aria-label={site.name}
+    style="aspect-ratio: 1000 / 240;"
+  >
+    <title>{site.name}</title>
+    <defs>
+      <!-- Drifting Plasma Linear Gradient (§7.1) -->
+      <linearGradient id="plasma-name-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop id="grad-stop-1" offset="0%" stop-color="var(--color-plasma-1, #FF2E8B)" />
+        <stop id="grad-stop-2" offset="33%" stop-color="var(--color-plasma-2, #FF5C4D)" />
+        <stop id="grad-stop-3" offset="66%" stop-color="var(--color-plasma-3, #FF9E1F)" />
+        <stop id="grad-stop-4" offset="100%" stop-color="var(--color-plasma-4, #FFD84D)" />
+      </linearGradient>
+
+      <!-- Entrance Clip Path (§7.1) -->
+      <clipPath id="hero-name-clip">
+        <rect id="hero-name-clip-rect" x="0" y="0" width="1000" height="240" />
+      </clipPath>
+    </defs>
+
+    <!-- Single line text for desktop / tablet (hidden <480px) -->
+    <text
+      id="hero-name-text-single"
+      x="0"
+      y="180"
+      fill="url(#plasma-name-grad)"
+      clip-path="url(#hero-name-clip)"
+      class="hidden sm:inline"
+      style="font-family: var(--font-display); font-weight: 700; font-stretch: 125%; letter-spacing: -0.02em; font-size: 150px;"
+    >
+      {site.name}
+    </text>
+
+    <!-- Two-line stacked text for mobile (<480px) -->
+    <text
+      id="hero-name-text-stacked"
+      x="0"
+      y="100"
+      fill="url(#plasma-name-grad)"
+      clip-path="url(#hero-name-clip)"
+      class="sm:hidden"
+      style="font-family: var(--font-display); font-weight: 700; font-stretch: 125%; letter-spacing: -0.02em; font-size: 110px;"
+    >
+      <tspan x="0" dy="0">{firstName}</tspan>
+      <tspan x="0" dy="100">{lastName}</tspan>
+    </text>
+  </svg>
+</div>
+
+<style>
+  /* Entrance animation if not reduced motion (§7.1) */
+  @media (prefers-reduced-motion: no-preference) {
+    #hero-name-clip-rect {
+      animation: wipe-reveal 900ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards;
+      transform-origin: left;
+    }
+  }
+
+  @keyframes wipe-reveal {
+    from {
+      width: 0;
+    }
+    to {
+      width: 1000px;
+    }
+  }
+</style>

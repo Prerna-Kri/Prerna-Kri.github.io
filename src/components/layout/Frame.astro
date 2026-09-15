@@ -1,0 +1,13 @@
+---
+type Props = {
+  as?: any;
+  class?: string;
+  id?: string;
+};
+
+const { as: Tag = 'div', class: className = '', id } = Astro.props as Props;
+---
+
+<Tag id={id} class={`frame ${className}`}>
+  <slot />
+</Tag>

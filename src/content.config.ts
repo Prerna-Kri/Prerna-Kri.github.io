@@ -1,17 +1,76 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// 1. Publications Schema (§8)
+// 1. Now Schema (§8)
+const now = defineCollection({
+  loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/now' }),
+  schema: z.object({
+    date: z.coerce.date(),
+    text: z.string().max(240),
+    link: z.string().optional(),
+  }),
+});
+
+// 2. Directions Schema (§8)
+const directions = defineCollection({
+  loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/directions' }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    order: z.number(),
+    blurb: z.string(),
+    body: z.string(),
+    methods: z.array(z.string()),
+    figure: z.string().optional(),
+    caption: z.string().optional(),
+  }),
+});
+
+// 3. Projects Schema (§8)
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/projects' }),
+  schema: z.object({
+    name: z.string(),
+    slug: z.string().optional(),
+    summary: z.string(),
+    description: z.string(),
+    type: z.enum(['research', 'tool', 'replication', 'coursework', 'exploration']),
+    stack: z.array(z.string()),
+    role: z.string(),
+    status: z.enum(['active', 'paused', 'archived']),
+    year: z.number(),
+    repo: z.string().optional(),
+    demo: z.string().optional(),
+    writeup: z.string().optional(),
+    image: z.string().optional(),
+    featured: z.boolean().default(false),
+  }),
+});
+
+// 4. Writing Schema (§8)
+const writing = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/writing' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
+    tags: z.array(z.string()),
+    draft: z.boolean().default(false),
+  }),
+});
+
+// 5. Publications Schema (§8 - retained for schema validation, empty collection)
 const publications = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/publications' }),
   schema: z.object({
     title: z.string(),
-    authors: z.array(z.string()), // "Lastname, F." format, in order
+    authors: z.array(z.string()),
     year: z.number(),
     venue: z.string(),
     venueShort: z.string().optional(),
-    type: z.enum(['journal', 'conference', 'preprint', 'workshop', 'thesis', 'chapter']),
-    status: z.enum(['published', 'accepted', 'under-review', 'preprint']),
+    type: z.enum(['journal', 'conference', 'preprint', 'workshop', 'thesis', 'chapter', 'poster', 'oral']),
+    status: z.enum(['published', 'accepted', 'under-review', 'in-press', 'preprint']),
     topics: z.array(z.string()),
     abstract: z.string(),
     bibtex: z.string(),
@@ -22,34 +81,13 @@ const publications = defineCollection({
     data: z.string().optional(),
     poster: z.string().optional(),
     slides: z.string().optional(),
-    video: z.string().optional(),
-    award: z.string().optional(), // "Best Paper", "Oral", "Spotlight"
-    citations: z.number().optional(),
+    award: z.string().optional(),
     featured: z.boolean().default(false),
     date: z.coerce.date(),
   }),
 });
 
-// 2. Projects Schema (§8)
-const projects = defineCollection({
-  loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/projects' }),
-  schema: z.object({
-    name: z.string(),
-    summary: z.string(),
-    description: z.string(),
-    stack: z.array(z.string()),
-    role: z.string(),
-    status: z.enum(['active', 'archived', 'paper-accompanying']),
-    year: z.number(),
-    repo: z.string().optional(),
-    demo: z.string().optional(),
-    paper: z.string().optional(),
-    image: z.string().optional(),
-    featured: z.boolean().default(false),
-  }),
-});
-
-// 3. Talks Schema (§8)
+// 6. Talks Schema (§8)
 const talks = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/talks' }),
   schema: z.object({
@@ -63,7 +101,7 @@ const talks = defineCollection({
   }),
 });
 
-// 4. Teaching Schema (§8)
+// 7. Teaching Schema (§8)
 const teaching = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/teaching' }),
   schema: z.object({
@@ -77,17 +115,7 @@ const teaching = defineCollection({
   }),
 });
 
-// 5. News Schema (§8)
-const news = defineCollection({
-  loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/news' }),
-  schema: z.object({
-    date: z.coerce.date(),
-    text: z.string().max(140),
-    link: z.string().optional(),
-  }),
-});
-
-// 6. Awards Schema (§8)
+// 8. Awards Schema (§8)
 const awards = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/awards' }),
   schema: z.object({
@@ -98,7 +126,7 @@ const awards = defineCollection({
   }),
 });
 
-// 7. Experience Schema (for /cv) (§8)
+// 9. Experience Schema (§8)
 const experience = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/experience' }),
   schema: z.object({
@@ -111,7 +139,7 @@ const experience = defineCollection({
   }),
 });
 
-// 8. Education Schema (for /cv) (§8)
+// 10. Education Schema (§8)
 const education = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/education' }),
   schema: z.object({
@@ -125,27 +153,26 @@ const education = defineCollection({
   }),
 });
 
-// 9. Blog Schema (MDX) (§8)
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+// 11. Skills Schema (§8)
+const skills = defineCollection({
+  loader: glob({ pattern: '**/*.{yaml,yml,json}', base: './src/content/skills' }),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.coerce.date(),
-    updated: z.coerce.date().optional(),
-    tags: z.array(z.string()),
-    draft: z.boolean().default(false),
+    group: z.string(),
+    items: z.array(z.string()),
+    order: z.number(),
   }),
 });
 
 export const collections = {
-  publications,
+  now,
+  directions,
   projects,
+  writing,
+  publications,
   talks,
   teaching,
-  news,
   awards,
   experience,
   education,
-  blog,
+  skills,
 };

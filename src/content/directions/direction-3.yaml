@@ -1,0 +1,10 @@
+title: "Applied Predictive Modeling"
+slug: "predictive-modeling"
+order: 3
+blurb: "Statistical machine learning algorithms for risk assessment, severe incident modeling, and tabular data analysis."
+body: "Translating heterogeneous environmental and physical data into actionable predictive signals requires disciplined statistical modeling. This work develops machine learning pipelines, including decision trees and ensemble classifiers, applied to road accident severity and medical risk forecasts. Interpretability and strict cross-validation guard against dataset biases and spurious correlations."
+methods:
+  - "Scikit-Learn"
+  - "Decision Trees"
+  - "Pandas"
+  - "Statistical Modeling"

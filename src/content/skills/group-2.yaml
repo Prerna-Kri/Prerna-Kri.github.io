@@ -1,0 +1,9 @@
+group: "Machine Learning & Vision"
+items:
+  - "PyTorch"
+  - "OpenCV"
+  - "Scikit-Learn"
+  - "Deep Learning"
+  - "CNNs"
+  - "YOLO"
+order: 2

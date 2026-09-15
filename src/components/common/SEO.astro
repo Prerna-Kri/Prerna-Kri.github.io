@@ -32,14 +32,15 @@ const {
   jsonLd,
 } = Astro.props;
 
+// Title rule per §13: Page — {{FULL_NAME}}; home is {{FULL_NAME}} — {{ROLE}}, {{FIELD}}
 const pageTitle = isHome
-  ? `${site.name} — Data Science Researcher`
+  ? `${site.name} — ${site.role}, ${site.field}`
   : `${title} — ${site.name}`;
 
 const canonicalURL = new URL(Astro.url.pathname, site.domain);
 const activeSocials = getActiveSocials();
 
-// Default Person JSON-LD for Home
+// Default Person JSON-LD for Home (§13)
 const defaultPersonJsonLd = isHome
   ? {
       '@context': 'https://schema.org',
@@ -53,18 +54,21 @@ const defaultPersonJsonLd = isHome
       url: site.domain,
       email: site.email,
       sameAs: activeSocials.map((s) => s.url),
-      knowsAbout: site.researchAreas,
+      knowsAbout: site.interests,
     }
   : null;
 
 const schemaData = jsonLd || defaultPersonJsonLd;
 ---
 
+<!-- Page Meta -->
 <title>{pageTitle}</title>
+<meta name="title" content={pageTitle} />
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+<meta name="robots" content="index, follow" />
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph -->
 <meta property="og:type" content={type} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={pageTitle} />
@@ -73,14 +77,12 @@ const schemaData = jsonLd || defaultPersonJsonLd;
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={description} />
 {ogImage && <meta name="twitter:image" content={new URL(ogImage, site.domain)} />}
 
-<!-- Robots -->
-<meta name="robots" content="index, follow" />
-
-<!-- Highwire Press Meta Tags for Google Scholar Indexing per §12 -->
+<!-- Highwire Press Tags (§13) -->
 {
   highwire && (
     <>
@@ -103,7 +105,7 @@ const schemaData = jsonLd || defaultPersonJsonLd;
   )
 }
 
-<!-- JSON-LD Structured Data per §12 -->
+<!-- Structured Data (JSON-LD) -->
 {
   schemaData && (
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)} />

@@ -1,0 +1,15 @@
+name: "Real-Time Object Detection & Tracking"
+slug: "real-time-object-tracking"
+summary: "Deep neural network implementation for multi-class object localization and tracking in video streams."
+description: "Implemented CNN-based architectures and YOLO models for real-time multi-class object localization, bounding box regression, and frame-to-frame tracking in dynamic video feeds."
+type: "tool"
+stack:
+  - "Python"
+  - "YOLO"
+  - "Deep Learning"
+  - "OpenCV"
+role: "Developer"
+status: "active"
+year: 2024
+repo: "https://github.com/Prerna-Kri"
+featured: true

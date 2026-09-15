@@ -1,0 +1,8 @@
+group: "Core Competencies"
+items:
+  - "Computer Vision"
+  - "Object Detection & Tracking"
+  - "Predictive Modeling"
+  - "Linear Algebra"
+  - "Statistical Analysis"
+order: 4

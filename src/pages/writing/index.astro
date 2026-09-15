@@ -6,7 +6,7 @@ import { withBase } from '../../lib/paths';
 import { calculateReadingTime } from '../../lib/readingTime';
 
 // Filter out drafts in production per §8
-const posts = await getCollection('blog', ({ data }) => {
+const posts = await getCollection('writing', ({ data }) => {
   return import.meta.env.PROD ? !data.draft : true;
 });
 
@@ -14,79 +14,79 @@ const sortedPosts = [...posts].sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
 
-// Collect all unique tags
 const allTags = Array.from(new Set(sortedPosts.flatMap((p) => p.data.tags)));
 ---
 
 <BaseLayout
-  title="Writing"
-  description="Technical essays, research notes, and mathematical explorations by Prerna Kumari."
+  title="Writing & Notes"
+  description="Technical notes, mathematical derivations, and explainers by Prerna Kumari."
 >
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-x-6 py-12 md:py-16">
-    <div class="md:col-start-2 md:col-span-8 space-y-10">
+  <div class="frame pt-28 pb-20 space-y-12">
+    <header class="space-y-4 border-b border-[var(--border-hairline)] pb-8 max-w-[70ch]">
+      <h1
+        class="text-[var(--step-4)] sm:text-[var(--step-5)] font-bold text-[var(--text-heading)] tracking-tight"
+        style="font-family: var(--font-display); font-weight: 700;"
+      >
+        Writing & Notes
+      </h1>
+      <p class="text-[var(--step-1)] text-[var(--text-body)] leading-relaxed">
+        Technical explainers, mathematical derivations, and research notes in computer vision and machine learning.
+      </p>
 
-      <header class="space-y-4 border-b border-[var(--border-subtle)] pb-8">
-        <h1 class="font-display text-[var(--step-5)] text-[var(--text-heading)] tracking-tight">
-          Writing & Notes
-        </h1>
-        <p class="text-[var(--step-1)] text-[var(--text-muted)] leading-relaxed max-w-[68ch]">
-          Expository essays, mathematical derivations, and technical investigations into geometric deep learning.
-        </p>
+      {allTags.length > 0 && (
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="font-mono text-xs text-[var(--text-muted)] py-1">Tags:</span>
+          {allTags.map((tag) => (
+            <span class="font-mono text-xs px-2.5 py-0.5 rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-well)] text-[var(--text-muted)]">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
 
-        <!-- Tag Filter pills -->
-        {allTags.length > 0 && (
-          <div class="flex flex-wrap gap-2 pt-2">
-            <span class="font-mono text-xs text-[var(--text-muted)] py-1">Tags:</span>
-            {allTags.map((tag) => (
-              <span class="font-mono text-xs px-2.5 py-0.5 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)]">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </header>
+    <!-- Reverse-chronological rows per §7.6 -->
+    <div class="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)] max-w-[70ch]">
+      {
+        sortedPosts.map((post) => {
+          const d = post.data;
+          const readingTime = calculateReadingTime(post.body || '');
+          const postSlug = post.id.replace(/\.[^/.]+$/, '');
+          const postUrl = withBase(`/writing/${postSlug}`);
 
-      <!-- Reverse-chronological post list per §7.7 -->
-      <div class="space-y-6 divide-y divide-[var(--border-subtle)]">
-        {
-          sortedPosts.map((post) => {
-            const d = post.data;
-            const readingTime = calculateReadingTime(post.body || '');
-            const postSlug = post.id.replace(/\.[^/.]+$/, '');
-            const postUrl = withBase(`/writing/${postSlug}`);
+          return (
+            <article class="py-6 items-baseline transition-colors hover:bg-[var(--bg-well)] px-2 -mx-2 rounded-[4px] space-y-2 group">
+              <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-[var(--text-muted)]">
+                <time datetime={new Date(d.date).toISOString()}>{formatDate(d.date)}</time>
+                <span>·</span>
+                <span>{readingTime}</span>
+              </div>
 
-            return (
-              <article class="pt-6 first:pt-0 space-y-2 group">
-                <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-[var(--text-muted)]">
-                  <time datetime={new Date(d.date).toISOString()}>{formatDate(d.date)}</time>
-                  <span>·</span>
-                  <span>{readingTime}</span>
-                </div>
+              <h2
+                class="text-[var(--step-1)] font-bold text-[var(--text-heading)] leading-snug group-hover:text-[var(--interactive)] transition-colors"
+                style="font-family: var(--font-display); font-weight: 700;"
+              >
+                <a href={postUrl}>
+                  {d.title}
+                </a>
+              </h2>
 
-                <h2 class="font-display text-[var(--step-2)] text-[var(--text-heading)] leading-snug">
-                  <a href={postUrl} class="group-hover:text-[var(--accent-signal)] transition-colors">
-                    {d.title}
-                  </a>
-                </h2>
+              <p class="text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
+                {d.description}
+              </p>
 
-                <p class="text-[var(--step--1)] text-[var(--text-body)] leading-relaxed max-w-[65ch]">
-                  {d.description}
-                </p>
-
-                <div class="pt-2">
-                  <a
-                    href={postUrl}
-                    class="font-mono text-xs text-[var(--accent-signal)] hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>Read article →</span>
-                  </a>
-                </div>
-              </article>
-            );
-          })
-        }
-      </div>
-
+              <div class="pt-2">
+                <a
+                  href={postUrl}
+                  class="link-volt font-mono text-xs font-medium inline-flex items-center gap-1"
+                >
+                  <span>Read note &rarr;</span>
+                </a>
+              </div>
+            </article>
+          );
+        })
+      }
     </div>
   </div>
 </BaseLayout>

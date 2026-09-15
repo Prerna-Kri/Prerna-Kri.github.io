@@ -1,0 +1,15 @@
+name: "Sentiment Analysis for Online Troll Detection"
+slug: "troll-sentiment-analysis"
+summary: "Scalable distributed sentiment analysis system for classifying online trolling behavior across large-scale social media data."
+description: "Implemented distributed text analysis pipelines using Apache Hadoop to process high-volume social media streams and classify abusive or trolling interactions."
+type: "coursework"
+stack:
+  - "Hadoop"
+  - "Big Data"
+  - "Python"
+  - "NLP"
+role: "Developer"
+status: "archived"
+year: 2023
+repo: "https://github.com/Prerna-Kri"
+featured: false

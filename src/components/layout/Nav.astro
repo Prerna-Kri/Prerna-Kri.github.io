@@ -1,5 +1,6 @@
 ---
 import { withBase } from '../../lib/paths';
+import { hasEntries } from '../../lib/collections';
 
 interface Props {
   currentPath?: string;
@@ -7,16 +8,29 @@ interface Props {
 
 const { currentPath = '' } = Astro.props;
 
-const navItems = [
+const hasPubs = await hasEntries('publications');
+const hasNotes = await hasEntries('writing');
+
+const navItems: { href: string; label: string; raw: string }[] = [
   { href: withBase('/research'), label: 'Research', raw: '/research' },
-  { href: withBase('/publications'), label: 'Publications', raw: '/publications' },
-  { href: withBase('/projects'), label: 'Projects', raw: '/projects' },
-  { href: withBase('/talks'), label: 'Talks', raw: '/talks' },
-  { href: withBase('/writing'), label: 'Writing', raw: '/writing' },
-  { href: withBase('/cv'), label: 'CV', raw: '/cv' },
+  { href: withBase('/work'), label: 'Work', raw: '/work' },
 ];
 
+if (hasPubs) {
+  navItems.push({ href: withBase('/publications'), label: 'Publications', raw: '/publications' });
+}
+
+if (hasNotes) {
+  navItems.push({ href: withBase('/writing'), label: 'Writing', raw: '/writing' });
+}
+
+navItems.push(
+  { href: withBase('/cv'), label: 'CV', raw: '/cv' },
+  { href: withBase('/#contact'), label: 'Contact', raw: '/#contact' }
+);
+
 function isActive(itemRaw: string): boolean {
+  if (itemRaw === '/#contact') return false;
   if (currentPath === itemRaw || currentPath === `${itemRaw}/`) return true;
   if (itemRaw !== '/' && currentPath.startsWith(itemRaw)) return true;
   return false;
@@ -39,7 +53,7 @@ function isActive(itemRaw: string): boolean {
         >
           {item.label}
           {active && (
-            <span class="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[var(--accent-signal)]" />
+            <span class="absolute -bottom-1 left-0 right-0 h-[2px] bg-[var(--interactive)]" />
           )}
         </a>
       );

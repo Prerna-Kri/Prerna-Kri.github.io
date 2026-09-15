@@ -1,0 +1,10 @@
+group: "Data & Systems"
+items:
+  - "NumPy"
+  - "Pandas"
+  - "Matplotlib"
+  - "Seaborn"
+  - "Jupyter"
+  - "Hadoop"
+  - "Git"
+order: 3

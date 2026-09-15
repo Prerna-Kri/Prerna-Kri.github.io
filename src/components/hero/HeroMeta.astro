@@ -1,0 +1,58 @@
+---
+import { site } from '../../config/site';
+import { withBase } from '../../lib/paths';
+import { getPhdYearString } from '../../lib/phdYear';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+const phdYear = getPhdYearString(site.startedPhD);
+---
+
+<div class={`flex flex-col items-start gap-6 max-w-[70ch] ${className}`}>
+  <!-- 1. Role, Field, Institution, Lab at --step-1 in --haze-200 -->
+  <p class="text-[var(--step-1)] text-[var(--text-body)] font-medium leading-snug">
+    {site.role} · {site.field} · {site.institution}
+  </p>
+
+  <!-- 2. Tagline at --step-2 in --haze-50, max 30ch -->
+  <h2
+    class="text-[var(--step-2)] text-[var(--text-heading)] font-semibold leading-tight max-w-[30ch]"
+    style="font-family: var(--font-sans);"
+  >
+    {site.tagline}
+  </h2>
+
+  <!-- 3. Mono line at --step--1 in --haze-400 giving location and computed PhD Year -->
+  <p class="font-mono text-[var(--step--1)] text-[var(--text-muted)] tracking-wide">
+    {site.location} · {phdYear}
+  </p>
+
+  <!-- 4. Two actions: Primary & Secondary per §7.1 -->
+  <div class="flex flex-wrap items-center gap-4 pt-2">
+    <!-- Primary action: solid --volt-400, ink text -->
+    <a
+      href="#now"
+      class="inline-flex items-center justify-center px-5 py-2.5 rounded-[4px] bg-[var(--interactive)] text-[#120722] font-semibold text-[var(--step--1)] hover:opacity-90 active:scale-[0.98] transition-all"
+    >
+      See what I'm working on
+    </a>
+
+    <!-- Secondary action: 1px --void-600 border, ghost -->
+    <a
+      href={withBase(site.cvPdf)}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center px-5 py-2.5 rounded-[4px] border border-[var(--border-emphasis)] bg-transparent text-[var(--text-heading)] hover:bg-[var(--bg-surface)] hover:border-[var(--interactive)] active:scale-[0.98] transition-all text-[var(--step--1)]"
+    >
+      Download CV
+    </a>
+  </div>
+
+  <!-- 5. Single line using openTo -->
+  <p class="text-[var(--step--1)] text-[var(--text-muted)] pt-1">
+    {site.openTo}
+  </p>
+</div>

@@ -1,0 +1,39 @@
+---
+import NameSvg from './NameSvg.astro';
+import PlasmaField from './PlasmaField.astro';
+import HeroMeta from './HeroMeta.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  id="hero"
+  class={`bleed relative min-h-[92svh] flex flex-col justify-between pt-24 pb-16 overflow-hidden bg-[var(--bg-page)] ${className}`}
+  aria-label="Introduction"
+>
+  <!-- Background Canvas Field (§7.1) -->
+  <PlasmaField />
+
+  <!-- Content Layer -->
+  <div class="frame relative z-10 flex flex-col justify-between flex-1 gap-12">
+    <!-- 1. The Signature Name Band (SVG width-fitted) -->
+    <div class="w-full pt-4 sm:pt-8">
+      <NameSvg />
+    </div>
+
+    <!-- 2. Hero Meta Information -->
+    <div class="w-full pb-6">
+      <HeroMeta />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initNameBand } from '../../scripts/nameBand';
+  initNameBand();
+  document.addEventListener('astro:page-load', () => initNameBand());
+</script>

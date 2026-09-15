@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import { formatYearMonth } from '../../lib/dates';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const nowEntries = await getCollection('now');
+const sortedEntries = nowEntries.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+).slice(0, 5);
+
+const currentMonthYear = new Date().toLocaleDateString('en-US', {
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<section id="now" class={`py-[var(--section-pad)] ${className}`} aria-labelledby="now-heading">
+  <div class="frame">
+    <!-- Heading & Current Month Sub-line (§7.1) -->
+    <div class="mb-12">
+      <h2 id="now-heading" class="text-[var(--step-3)] font-bold text-[var(--text-heading)] tracking-tight">
+        Now
+      </h2>
+      <p class="font-mono text-[var(--step--1)] text-[var(--text-muted)] mt-1">
+        Updated {currentMonthYear}
+      </p>
+    </div>
+
+    <!-- Timeline rows (§7.1) -->
+    <div class="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
+      {
+        sortedEntries.map((item) => (
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-6 items-baseline transition-colors hover:bg-[var(--bg-surface)] px-2 -mx-2 rounded-[4px]">
+            <!-- Left gutter: mono date -->
+            <div class="md:col-span-3">
+              <time
+                datetime={new Date(item.data.date).toISOString().split('T')[0]}
+                class="font-mono text-[var(--step--1)] text-[var(--text-muted)] tracking-wider"
+              >
+                {formatYearMonth(item.data.date)}
+              </time>
+            </div>
+
+            <!-- Right: text + optional link -->
+            <div class="md:col-span-9 space-y-2">
+              <p class="text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
+                {item.data.text}
+              </p>
+              {item.data.link && (
+                <a
+                  href={item.data.link}
+                  class="link-volt inline-flex items-center gap-1 text-[var(--step--1)] font-medium"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Read update</span>
+                </a>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,144 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/paths';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured)
+  .slice(0, 4);
+---
+
+<section id="work" class={`py-[var(--section-pad)] ${className}`} aria-labelledby="work-heading">
+  <div class="frame space-y-16">
+    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-[var(--border-hairline)] pb-6">
+      <div>
+        <h2 id="work-heading" class="text-[var(--step-3)] font-bold text-[var(--text-heading)] tracking-tight">
+          Work
+        </h2>
+        <p class="font-mono text-[var(--step--1)] text-[var(--text-muted)] mt-1">
+          Featured projects & implementations
+        </p>
+      </div>
+
+      <a href={withBase('/work')} class="link-volt text-[var(--step-0)] font-medium">
+        All projects &rarr;
+      </a>
+    </div>
+
+    <!-- Featured project rows (§7.1: alternating 16:10 figure side) -->
+    <div class="space-y-16 lg:space-y-24">
+      {
+        featuredProjects.map((project, index) => {
+          const isReversed = index % 2 === 1;
+
+          return (
+            <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              <!-- 16:10 Figure with square 1px frame -->
+              <div class={`lg:col-span-5 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
+                <div class="relative w-full aspect-[16/10] bg-[var(--bg-well)] border border-[var(--border-hairline)] rounded-none overflow-hidden flex flex-col justify-between p-6 group">
+                  <!-- Abstract geometric plotting background -->
+                  <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(circle_at_top_right,var(--accent-plasma-1),transparent_60%)]"></div>
+
+                  <div class="relative z-10 flex items-center justify-between">
+                    <span class="font-mono text-xs uppercase px-2 py-0.5 rounded-[4px] bg-[var(--bg-surface)] border border-[var(--border-hairline)] text-[var(--text-muted)]">
+                      {project.data.type}
+                    </span>
+                    <span class="font-mono text-xs text-[var(--text-muted)]">
+                      {project.data.year}
+                    </span>
+                  </div>
+
+                  <div class="relative z-10">
+                    <div class="font-mono text-xs text-[var(--text-muted)]">SYSTEM ID</div>
+                    <div class="font-mono text-sm text-[var(--interactive)] font-medium">
+                      {project.data.slug ?? project.id}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Content details -->
+              <div class={`lg:col-span-7 space-y-4 ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
+                <div class="flex items-center gap-3">
+                  <span class="font-mono text-xs text-[var(--text-muted)]">{project.data.role}</span>
+                  <span class="text-[var(--border-hairline)]">·</span>
+                  <span class="font-mono text-xs text-[var(--interactive)] capitalize">{project.data.status}</span>
+                </div>
+
+                <h3
+                  class="text-[var(--step-2)] font-bold text-[var(--text-heading)] leading-snug"
+                  style="font-family: var(--font-display); font-weight: 700;"
+                >
+                  {project.data.name}
+                </h3>
+
+                <p class="text-[var(--step-0)] text-[var(--text-heading)] font-medium leading-normal">
+                  {project.data.summary}
+                </p>
+
+                <p class="text-[var(--step--1)] text-[var(--text-body)] leading-relaxed">
+                  {project.data.description}
+                </p>
+
+                <!-- Mono stack tags -->
+                <div class="flex flex-wrap gap-2 pt-2">
+                  {
+                    project.data.stack.map((tech) => (
+                      <span class="font-mono text-xs text-[var(--text-muted)] bg-[var(--bg-surface)] px-2 py-0.5 rounded-[4px] border border-[var(--border-hairline)]">
+                        {tech}
+                      </span>
+                    ))
+                  }
+                </div>
+
+                <!-- Links to code, demo, writeup -->
+                <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-[var(--border-hairline)] text-[var(--step--1)]">
+                  {project.data.repo && (
+                    <a
+                      href={project.data.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link-volt font-medium inline-flex items-center gap-1"
+                    >
+                      <span>Code repository &rarr;</span>
+                    </a>
+                  )}
+                  {project.data.demo && (
+                    <a
+                      href={project.data.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link-volt font-medium inline-flex items-center gap-1"
+                    >
+                      <span>Live demonstration &rarr;</span>
+                    </a>
+                  )}
+                  {project.data.writeup && (
+                    <a
+                      href={withBase(project.data.writeup)}
+                      class="link-volt font-medium inline-flex items-center gap-1"
+                    >
+                      <span>Write-up &rarr;</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <div class="pt-8 text-center sm:text-left">
+      <a href={withBase('/work')} class="link-volt text-[var(--step-0)] font-medium inline-flex items-center gap-1">
+        <span>View full project index ({allProjects.length} items) &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>

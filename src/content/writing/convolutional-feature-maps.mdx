@@ -1,0 +1,57 @@
+---
+title: "Convolutional Feature Maps in Fine-Grained Agricultural Vision"
+description: "Examining multi-scale feature hierarchies and spatial receptive fields for micro-lesion detection."
+date: 2025-06-15
+tags:
+  - "computer-vision"
+  - "deep-learning"
+  - "pytorch"
+draft: false
+---
+
+In fine-grained agricultural disease classification, target lesions frequently occupy fewer than $10 \times 10$ pixels within a high-resolution field image. Standard downsampling layers attenuate these faint morphological patterns before deep layers can construct high-level semantic representations.
+
+## Receptive Field & Spatial Resolution
+
+Let an input feature map $X \in \mathbb{R}^{H \times W \times C}$ pass through a convolutional layer with filter weights $W \in \mathbb{R}^{k \times k \times C \times C'}$ and bias $b \in \mathbb{R}^{C'}$. The pre-activation at spatial index $(i, j)$ for output channel $m$ is given by:
+
+$$
+Z_{i, j, m} = b_m + \sum_{c=1}^{C} \sum_{u=-p}^{p} \sum_{v=-p}^{p} X_{i+u, j+v, c} \cdot W_{u+p, v+p, c, m}
+$$
+
+where $p = \lfloor k/2 \rfloor$ denotes the spatial padding. For an $L$-layer network with stride $s_l$ and kernel size $k_l$, the theoretical receptive field $R_L$ expands recurrence-wise according to:
+
+$$
+R_l = R_{l-1} + (k_l - 1) \cdot \prod_{i=1}^{l-1} s_i, \quad R_0 = 1
+$$
+
+## Feature Extraction Block
+
+Below is a PyTorch implementation for a multi-scale lesion extraction module that preserves low-level edge features while expanding semantic representation:
+
+```python
+import torch
+import torch.nn as nn
+
+class LesionFeatureExtractor(nn.Module):
+    """Multi-scale feature extractor preserving high-frequency lesion gradients."""
+    def __init__(self, in_channels: int, out_channels: int):
+        super().__init__()
+        self.branch1 = nn.Conv2d(in_channels, out_channels // 2, kernel_size=3, padding=1)
+        self.branch2 = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels // 2, kernel_size=1),
+            nn.BatchNorm2d(out_channels // 2),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels // 2, out_channels // 2, kernel_size=3, padding=1)
+        )
+        self.norm = nn.BatchNorm2d(out_channels)
+        self.act = nn.ReLU(inplace=True)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        out1 = self.branch1(x)
+        out2 = self.branch2(x)
+        merged = torch.cat([out1, out2], dim=1)
+        return self.act(self.norm(merged))
+```
+
+By preserving feature maps across early convolutional stages, subsequent classification heads retain sufficient spatial variance to distinguish localized thrips punctures from abiotic foliar stress.

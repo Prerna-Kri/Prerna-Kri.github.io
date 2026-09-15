@@ -1,5 +1,5 @@
 /**
- * Client island for Theme Toggle per §5 & §6.2.
+ * Client island for Theme Toggle per §6 & §10.
  * Supports View Transitions crossfade and updates localStorage, meta theme-color, and color-scheme.
  */
 export function initThemeToggle(): void {
@@ -15,7 +15,7 @@ export function initThemeToggle(): void {
       root.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
       if (metaThemeColor) {
-        metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#0A1424' : '#F5F7FB');
+        metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#120722' : '#FBF8FF');
       }
       if (metaColorScheme) {
         metaColorScheme.setAttribute('content', newTheme === 'dark' ? 'dark' : 'light');

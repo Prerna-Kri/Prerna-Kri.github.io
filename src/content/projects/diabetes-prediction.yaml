@@ -1,0 +1,14 @@
+name: "Future Diabetes Prediction"
+slug: "future-diabetes-prediction"
+summary: "Clinical decision support classifier predicting diabetes onset based on metabolic and lifestyle indicators."
+description: "Developed and evaluated a Decision Tree classifier on clinical metrics, achieving 90% accuracy on test validation for early intervention identification."
+type: "exploration"
+stack:
+  - "Python"
+  - "Scikit-Learn"
+  - "Decision Trees"
+role: "Developer"
+status: "archived"
+year: 2023
+repo: "https://github.com/Prerna-Kri"
+featured: false

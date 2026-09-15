@@ -4,7 +4,7 @@ import { withBase } from '../lib/paths';
 export async function GET() {
   const publications = await getCollection('publications');
   const projects = await getCollection('projects');
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const notes = await getCollection('writing', ({ data }) => !data.draft);
 
   const searchIndex: Array<{
     id: string;
@@ -15,18 +15,35 @@ export async function GET() {
     actionId?: 'toggle-theme' | 'copy-email' | 'download-cv';
   }> = [];
 
-  // Pages
+  // Pages (§7, §10)
   searchIndex.push(
-    { id: 'page-home', title: 'Home', category: 'page', url: withBase('/'), description: 'Overview and research highlights' },
-    { id: 'page-research', title: 'Research Pillars', category: 'page', url: withBase('/research'), description: 'Geometric invariance, visual topology, and applied vision' },
-    { id: 'page-publications', title: 'Publications', category: 'page', url: withBase('/publications'), description: 'Peer-reviewed papers and conference preprints' },
-    { id: 'page-projects', title: 'Projects & Code', category: 'page', url: withBase('/projects'), description: 'Applied machine learning and vision implementations' },
-    { id: 'page-talks', title: 'Talks & Teaching', category: 'page', url: withBase('/talks'), description: 'Lectures, colloquia, instruction, and academic service' },
-    { id: 'page-cv', title: 'Curriculum Vitae', category: 'page', url: withBase('/cv'), description: 'Full academic history, qualifications, and PDF download' },
-    { id: 'page-writing', title: 'Writing', category: 'page', url: withBase('/writing'), description: 'Expository essays and mathematical notes' },
+    { id: 'page-home', title: 'Home', category: 'page', url: withBase('/'), description: 'Overview, timeline, and research highlights' },
+    { id: 'page-research', title: 'Research', category: 'page', url: withBase('/research'), description: 'Computer vision diagnostics and machine learning directions' },
+    { id: 'page-work', title: 'Work & Code', category: 'page', url: withBase('/work'), description: 'Computational implementations and models' },
+    { id: 'page-cv', title: 'Curriculum Vitae', category: 'page', url: withBase('/cv'), description: 'Full academic history, qualifications, and PDF' },
   );
 
-  // Actions
+  if (notes.length > 0) {
+    searchIndex.push({
+      id: 'page-writing',
+      title: 'Writing & Notes',
+      category: 'page',
+      url: withBase('/writing'),
+      description: 'Technical explainers and derivations',
+    });
+  }
+
+  if (publications.length > 0) {
+    searchIndex.push({
+      id: 'page-publications',
+      title: 'Publications',
+      category: 'page',
+      url: withBase('/publications'),
+      description: 'Peer-reviewed papers and preprints',
+    });
+  }
+
+  // Quick Actions (§10)
   searchIndex.push(
     { id: 'act-theme', title: 'Toggle Theme', category: 'action', url: '#', description: 'Switch between dark and light appearance', actionId: 'toggle-theme' },
     { id: 'act-email', title: 'Copy Email', category: 'action', url: '#', description: 'Copy prerna26@iiserb.ac.in to clipboard', actionId: 'copy-email' },
@@ -47,25 +64,24 @@ export async function GET() {
 
   // Projects
   projects.forEach((proj) => {
-    const slug = proj.id.replace(/\.[^/.]+$/, '');
     searchIndex.push({
-      id: `proj-${slug}`,
+      id: `proj-${proj.id}`,
       title: proj.data.name,
       category: 'project',
-      url: withBase('/projects'),
+      url: withBase('/work'),
       description: proj.data.summary,
     });
   });
 
-  // Posts
-  posts.forEach((post) => {
-    const slug = post.id.replace(/\.[^/.]+$/, '');
+  // Notes
+  notes.forEach((note) => {
+    const slug = note.id.replace(/\.[^/.]+$/, '');
     searchIndex.push({
-      id: `post-${slug}`,
-      title: post.data.title,
+      id: `note-${slug}`,
+      title: note.data.title,
       category: 'post',
       url: withBase(`/writing/${slug}`),
-      description: post.data.description,
+      description: note.data.description,
     });
   });
 

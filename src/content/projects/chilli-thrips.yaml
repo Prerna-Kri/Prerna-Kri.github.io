@@ -1,0 +1,15 @@
+name: "Chilli Thrips Detection and Prevention"
+slug: "chilli-thrips-detection"
+summary: "Computer vision and deep learning framework for leaf pathology detection and thrips damage classification."
+description: "Constructed an agricultural vision pipeline for thrips pest detection and prevention. Created a custom dataset by capturing field images to benchmark fine-grained damage detection under variable environmental conditions."
+type: "research"
+stack:
+  - "Python"
+  - "PyTorch"
+  - "OpenCV"
+  - "CNN"
+role: "Lead Researcher"
+status: "active"
+year: 2024
+repo: "https://github.com/Prerna-Kri"
+featured: true

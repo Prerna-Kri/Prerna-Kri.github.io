@@ -4,46 +4,52 @@ import { withBase } from '../../lib/paths';
 import Nav from './Nav.astro';
 import MobileNav from './MobileNav.astro';
 import ThemeToggle from '../common/ThemeToggle.astro';
-import MonogramMark from '../hero/MonogramMark.astro';
 import Icon from '../common/Icon.astro';
 
 interface Props {
-  isHome?: boolean;
   currentPath?: string;
 }
 
-const { isHome = false, currentPath = '' } = Astro.props;
+const { currentPath = '' } = Astro.props;
 ---
 
 <header
   id="site-header"
-  class="sticky top-0 z-40 w-full h-[68px] transition-colors duration-200"
+  class="fixed top-0 left-0 right-0 z-40 w-full h-[64px] transition-all duration-300"
 >
-  <div class="max-w-[1320px] mx-auto h-full px-[clamp(1.25rem,5vw,5rem)] flex items-center justify-between">
-    <!-- Left: Brand / Name or Monogram -->
+  <div class="frame h-full flex items-center justify-between">
+    <!-- Left: Initials mark in Archivo 700 width 125 + Full name beside it -->
     <a
       href={withBase('/')}
-      class="inline-flex items-center gap-2.5 font-medium text-[var(--step-0)] text-[var(--text-heading)] hover:text-[var(--accent-signal)] transition-colors"
+      class="inline-flex items-baseline gap-2 text-[var(--text-heading)] hover:text-[var(--interactive)] transition-colors py-1"
       aria-label={`${site.name} — Home`}
     >
-      {isHome ? <MonogramMark /> : <span class="font-semibold">{site.name}</span>}
+      <span
+        class="text-xl font-bold tracking-tight text-[var(--text-heading)]"
+        style="font-family: var(--font-display); font-stretch: 125%; font-weight: 700;"
+      >
+        {site.initials}
+      </span>
+      <span class="hidden sm:inline text-[var(--step-0)] text-[var(--text-body)] font-normal">
+        {site.name}
+      </span>
     </a>
 
-    <!-- Right: Nav, Search affordance, Theme toggle, Mobile nav -->
-    <div class="flex items-center gap-4">
+    <!-- Right: Nav, Theme toggle, ⌘K affordance, Mobile menu button -->
+    <div class="flex items-center gap-4 sm:gap-6">
       <Nav currentPath={currentPath} />
 
-      <!-- Command Palette Trigger Button -->
+      <!-- Command Palette Affordance (Ctrl+K) -->
       <button
         type="button"
         data-command-palette-trigger
-        class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1 text-[var(--step--1)] rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:border-[var(--border-strong)] transition-colors cursor-pointer"
+        class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-[var(--step--1)] rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-well)] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:border-[var(--border-emphasis)] transition-colors cursor-pointer"
         aria-label="Open command palette (Ctrl+K)"
         title="Open command palette (Ctrl+K)"
       >
-        <Icon name="search" size={15} />
+        <Icon name="search" size={14} />
         <span class="text-xs">Search</span>
-        <kbd class="font-mono text-[10px] px-1 py-0.5 rounded bg-[var(--bg-well)] border border-[var(--border-subtle)]">⌘K</kbd>
+        <kbd class="font-mono text-[10px] px-1 py-0.5 rounded bg-[var(--bg-surface)] border border-[var(--border-hairline)]">⌘K</kbd>
       </button>
 
       <ThemeToggle />
@@ -51,6 +57,9 @@ const { isHome = false, currentPath = '' } = Astro.props;
       <MobileNav currentPath={currentPath} />
     </div>
   </div>
+
+  <!-- Scroll Progress Line (§5.2, §7) -->
+  <div id="header-scroll-progress" class="scroll-progress-bar" aria-hidden="true"></div>
 </header>
 
 <script>
@@ -60,20 +69,28 @@ const { isHome = false, currentPath = '' } = Astro.props;
 
     if (window.scrollY > 120) {
       header.classList.add(
-        'backdrop-blur-[12px]',
-        'bg-[var(--bg-page)]/85',
+        'backdrop-blur-[14px]',
+        'bg-[#120722]/74',
         'border-b',
-        'border-[var(--border-subtle)]',
-        'shadow-sm',
+        'border-[var(--border-hairline)]',
+        'shadow-md'
       );
     } else {
       header.classList.remove(
-        'backdrop-blur-[12px]',
-        'bg-[var(--bg-page)]/85',
+        'backdrop-blur-[14px]',
+        'bg-[#120722]/74',
         'border-b',
-        'border-[var(--border-subtle)]',
-        'shadow-sm',
+        'border-[var(--border-hairline)]',
+        'shadow-md'
       );
+    }
+
+    // Scroll progress line
+    const progressEl = document.getElementById('header-scroll-progress');
+    if (progressEl) {
+      const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollTotal > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollTotal)) : 0;
+      progressEl.style.transform = `scaleX(${progress})`;
     }
   }
 

@@ -1,10 +1,8 @@
-# TODO(content): replace placeholder experience details if needed
-role: "Graduate Student Researcher"
-org: "Banaras Hindu University (BHU)"
-location: "Varanasi, Uttar Pradesh, India"
-start: "2022"
-end: "2024"
+role: "Subject Matter Expert"
+org: "Chegg India Private Limited"
+location: "Remote, India"
+start: "2023-10"
+end: "Present"
 bullets:
-  - "Conducted mathematical investigations into topological data analysis and loss surface geometry for neural networks."
-  - "Developed PyTorch implementations for spatio-temporal graph convolutions on traffic accident risk prediction."
-  - "Assisted in postgraduate coursework grading and computational problem sessions."
+  - "Utilized analytical and research skills to address diverse academic queries in Computer Science and Mathematics."
+  - "Assisted students globally in understanding core concepts through structured problem solving and technical guidance."

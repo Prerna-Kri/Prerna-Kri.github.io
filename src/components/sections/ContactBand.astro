@@ -1,0 +1,81 @@
+---
+import { site } from '../../config/site';
+import { getActiveSocials } from '../../lib/config';
+import CopyButton from '../common/CopyButton.astro';
+import Icon from '../common/Icon.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+const activeSocials = getActiveSocials();
+---
+
+<section
+  id="contact"
+  class={`bleed relative bg-[var(--bg-well)] py-20 border-t-[3px] ${className}`}
+  style="border-image: linear-gradient(90deg, var(--accent-plasma-1), var(--accent-plasma-2), var(--accent-plasma-3), var(--accent-plasma-4)) 1;"
+  aria-labelledby="contact-heading"
+>
+  <div class="frame flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+    <!-- Left: Initials mark + Email + Context -->
+    <div class="space-y-6 max-w-[65ch]">
+      <div class="flex items-center gap-3">
+        <span
+          class="text-3xl font-bold text-[var(--text-heading)] tracking-tight"
+          style="font-family: var(--font-display); font-stretch: 125%; font-weight: 700;"
+        >
+          {site.initials}
+        </span>
+        <span class="text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider">
+          // Contact & Collaboration
+        </span>
+      </div>
+
+      <div>
+        <h2 id="contact-heading" class="sr-only">Contact {site.firstName}</h2>
+        <p class="text-[var(--step-0)] text-[var(--text-body)] mb-2">
+          Open to research discussions, reading groups, and technical collaborations.
+        </p>
+        
+        <!-- Real email at --step-3 with copy button (§7.1) -->
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href={`mailto:${site.email}`}
+            class="text-[var(--step-2)] sm:text-[var(--step-3)] font-bold text-[var(--text-heading)] hover:text-[var(--interactive)] font-mono transition-colors break-all"
+          >
+            {site.email}
+          </a>
+          <CopyButton text={site.email} label="Copy address" />
+        </div>
+      </div>
+
+      <p class="text-[var(--step--1)] text-[var(--text-muted)] font-mono">
+        Department of Data Science & Engineering · IISER Bhopal, India
+      </p>
+    </div>
+
+    <!-- Right: Configured socials -->
+    <div class="space-y-4 shrink-0">
+      <div class="font-mono text-xs text-[var(--text-muted)] uppercase tracking-wider">
+        Profiles & Repositories
+      </div>
+      <div class="flex flex-col gap-2">
+        {
+          activeSocials.map((social) => (
+            <a
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:border-[var(--interactive)] transition-colors text-[var(--step--1)]"
+            >
+              <Icon name={social.key === 'github' ? 'github' : social.key === 'linkedin' ? 'linkedin' : 'academic'} size={15} />
+              <span>{social.label}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

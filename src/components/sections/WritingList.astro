@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/paths';
+import { formatDate } from '../../lib/dates';
+import { calculateReadingTime } from '../../lib/readingTime';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const allNotes = await getCollection('writing');
+const publishedNotes = allNotes
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+---
+
+{
+  publishedNotes.length > 0 && (
+    <section id="writing" class={`py-[var(--section-pad)] ${className}`} aria-labelledby="writing-heading">
+      <div class="frame space-y-12">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-[var(--border-hairline)] pb-6">
+          <div>
+            <h2 id="writing-heading" class="text-[var(--step-3)] font-bold text-[var(--text-heading)] tracking-tight">
+              Writing
+            </h2>
+            <p class="font-mono text-[var(--step--1)] text-[var(--text-muted)] mt-1">
+              Technical notes, derivations, and explainers
+            </p>
+          </div>
+
+          <a href={withBase('/writing')} class="link-volt text-[var(--step-0)] font-medium">
+            All writing &rarr;
+          </a>
+        </div>
+
+        <div class="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
+          {
+            publishedNotes.map((note) => {
+              const readingTime = calculateReadingTime(note.body ?? '');
+              const noteHref = withBase(`/writing/${note.id}`);
+
+              return (
+                <article class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-6 items-baseline transition-colors hover:bg-[var(--bg-surface)] px-2 -mx-2 rounded-[4px] group">
+                  <!-- Left: mono date -->
+                  <div class="md:col-span-3">
+                    <time
+                      datetime={new Date(note.data.date).toISOString().split('T')[0]}
+                      class="font-mono text-[var(--step--1)] text-[var(--text-muted)] tracking-wider"
+                    >
+                      {formatDate(note.data.date)}
+                    </time>
+                  </div>
+
+                  <!-- Right: title, description, reading time -->
+                  <div class="md:col-span-9 space-y-2">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                      <h3
+                        class="text-[var(--step-1)] font-bold text-[var(--text-heading)] group-hover:text-[var(--interactive)] transition-colors leading-snug"
+                        style="font-family: var(--font-display); font-weight: 700;"
+                      >
+                        <a href={noteHref} class="hover:underline">
+                          {note.data.title}
+                        </a>
+                      </h3>
+                      <span class="font-mono text-xs text-[var(--text-muted)] shrink-0">
+                        {readingTime}
+                      </span>
+                    </div>
+
+                    <p class="text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
+                      {note.data.description}
+                    </p>
+                  </div>
+                </article>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,10 @@
+title: "Real-Time Object Tracking"
+slug: "object-tracking"
+order: 2
+blurb: "Neural network implementations for real-time multi-class object localization and tracking in continuous video feeds."
+body: "Tracking moving targets across temporal frames demands precise spatial regression alongside computational efficiency. This research implements YOLO variants and convolutional feature pyramids to maintain accurate bounding-box alignment across frame sequences. Experimental benchmarks prioritize low inference latency without degrading bounding box intersection-over-union metrics."
+methods:
+  - "YOLO"
+  - "Deep Learning"
+  - "Bounding Box Regression"
+  - "OpenCV"

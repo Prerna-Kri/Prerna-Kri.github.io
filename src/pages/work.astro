@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = await getCollection('projects');
+const sortedProjects = projects.sort((a, b) => b.data.year - a.data.year);
+
+// Distinct types and stacks
+const projectTypes = ['all', 'research', 'tool', 'replication', 'coursework', 'exploration'];
+const allStacks = Array.from(new Set(projects.flatMap((p) => p.data.stack)));
+---
+
+<BaseLayout
+  title="Work & Implementations"
+  description="Computational implementations, deep learning models, and computer vision pipelines developed by Prerna Kumari."
+>
+  <div class="frame pt-28 pb-20 space-y-12">
+    <header class="space-y-4 border-b border-[var(--border-hairline)] pb-8 max-w-[70ch]">
+      <h1
+        class="text-[var(--step-4)] sm:text-[var(--step-5)] font-bold text-[var(--text-heading)] tracking-tight"
+        style="font-family: var(--font-display); font-weight: 700;"
+      >
+        Work & Code
+      </h1>
+      <p class="text-[var(--step-1)] text-[var(--text-body)] leading-relaxed">
+        Research code, computational experiments, and practical machine learning systems. Server-rendered, filterable by methodology and stack.
+      </p>
+    </header>
+
+    <!-- Filter Controls (§7.3) -->
+    <div id="work-filter-controls" class="space-y-4 pb-4 border-b border-[var(--border-hairline)]">
+      <!-- Type Filter Pills -->
+      <div class="space-y-2">
+        <span class="font-mono text-xs uppercase text-[var(--text-muted)] tracking-wider">
+          Filter by Type
+        </span>
+        <div class="flex flex-wrap gap-2">
+          {
+            projectTypes.map((type) => (
+              <button
+                type="button"
+                data-filter-type={type}
+                aria-pressed={type === 'all' ? 'true' : 'false'}
+                class={`px-3 py-1 text-xs font-mono rounded-[999px] border transition-colors cursor-pointer capitalize ${
+                  type === 'all'
+                    ? 'bg-[var(--interactive)] text-[#120722] border-[var(--interactive)] font-semibold'
+                    : 'bg-[var(--bg-well)] text-[var(--text-muted)] border-[var(--border-hairline)] hover:border-[var(--interactive)]'
+                }`}
+              >
+                {type}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Stack Filter Pills -->
+      <div class="space-y-2 pt-2">
+        <span class="font-mono text-xs uppercase text-[var(--text-muted)] tracking-wider">
+          Filter by Tooling
+        </span>
+        <div class="flex flex-wrap gap-1.5">
+          <button
+            type="button"
+            data-filter-stack="all"
+            aria-pressed="true"
+            class="px-2.5 py-0.5 text-xs font-mono rounded-[999px] border bg-[var(--interactive)] text-[#120722] border-[var(--interactive)] font-semibold transition-colors cursor-pointer"
+          >
+            all
+          </button>
+          {
+            allStacks.map((stack) => (
+              <button
+                type="button"
+                data-filter-stack={stack}
+                aria-pressed="false"
+                class="px-2.5 py-0.5 text-xs font-mono rounded-[999px] border bg-[var(--bg-well)] text-[var(--text-muted)] border-[var(--border-hairline)] hover:border-[var(--interactive)] transition-colors cursor-pointer"
+              >
+                {stack}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Screen reader live announcement (§11) -->
+      <div id="work-results-live" class="sr-only" aria-live="polite">
+        Showing {sortedProjects.length} of {sortedProjects.length} projects
+      </div>
+    </div>
+
+    <!-- Two-column grid ≥md using container queries (§7.3) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 @container">
+      {
+        sortedProjects.map((p) => (
+          <article
+            class="work-card flex flex-col justify-between p-6 rounded-[12px] border border-[var(--border-hairline)] bg-[var(--bg-well)] hover:border-[var(--interactive)] transition-all duration-200 space-y-6"
+            data-project-type={p.data.type}
+            data-project-stack={p.data.stack.join(',')}
+          >
+            <!-- Card Header: figure / badge -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between font-mono text-xs text-[var(--text-muted)]">
+                <span class="capitalize px-2 py-0.5 rounded-[4px] bg-[var(--bg-surface)] border border-[var(--border-hairline)]">
+                  {p.data.type}
+                </span>
+                <span>{p.data.year}</span>
+              </div>
+
+              <h2
+                class="text-[var(--step-1)] font-bold text-[var(--text-heading)] leading-snug"
+                style="font-family: var(--font-display); font-weight: 700;"
+              >
+                {p.data.name}
+              </h2>
+
+              <p class="text-[var(--step-0)] text-[var(--text-body)] font-medium">
+                {p.data.summary}
+              </p>
+
+              <p class="text-[var(--step--1)] text-[var(--text-muted)] leading-relaxed">
+                {p.data.description}
+              </p>
+            </div>
+
+            <!-- Card Footer: stack tags + links + status -->
+            <div class="space-y-4 pt-4 border-t border-[var(--border-hairline)]">
+              <div class="flex flex-wrap gap-1.5">
+                {p.data.stack.map((tech) => (
+                  <span class="font-mono text-xs text-[var(--text-muted)] bg-[var(--bg-surface)] px-2 py-0.5 rounded-[4px] border border-[var(--border-hairline)]">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div class="flex items-center justify-between pt-2 text-[var(--step--1)]">
+                <div class="flex items-center gap-3">
+                  <span class="font-mono text-xs text-[var(--text-muted)]">{p.data.role}</span>
+                  <span class="text-[var(--border-hairline)]">·</span>
+                  <span class="font-mono text-xs text-[var(--interactive)] capitalize">{p.data.status}</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  {p.data.repo && (
+                    <a
+                      href={p.data.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link-volt font-medium"
+                    >
+                      Repository &rarr;
+                    </a>
+                  )}
+                  {p.data.demo && (
+                    <a
+                      href={p.data.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link-volt font-medium"
+                    >
+                      Demo &rarr;
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initWorkFilter } from '../scripts/filter';
+  initWorkFilter();
+  document.addEventListener('astro:page-load', () => initWorkFilter());
+</script>

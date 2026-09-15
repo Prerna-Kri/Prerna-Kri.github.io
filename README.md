@@ -1,14 +1,14 @@
 # Personal Academic Website — Prerna Kumari
 
-A static, high-performance academic personal website built with Astro 5, Tailwind CSS v4, Astro Content Collections, and self-hosted typography. Engineered with the *"instrument, not brochure"* design philosophy, the site presents research, publications, software artifacts, and curriculum vitae with the quiet precision of scientific figures and lab notebooks. Features a 1,400-point dimensionality-reduction canvas simulation, accessible command palette (`⌘K`), Highwire Press metadata for Google Scholar indexing, full keyboard traversal, and strict WCAG 2.2 AA compliance.
+A static personal academic website built with Astro 5, Tailwind CSS v4, Astro Content Collections, and self-hosted variable typography. Designed under the **plasma** aesthetic direction, the site combines deep violet-black void surfaces (`#120722`), a 4-stop spectral colormap ramp (`#FF2E8B` &rarr; `#FF5C4D` &rarr; `#FF9E1F` &rarr; `#FFD84D`), electric cyan interaction points (`#3BE8FF`), an SVG width-fitted dynamic name band with drifting gradient, and a 900-particle clustering physics simulation.
 
-<!-- SCREENSHOT_PLACEHOLDER: Add an annotated desktop screenshot of the Home hero and publications rail here -->
+<!-- SCREENSHOT_PLACEHOLDER: Add an annotated screenshot of the Home hero and work sections here -->
 
 ---
 
 ## 1. Quick Start
 
-Ensure Node.js 22 LTS is installed on your system.
+Ensure Node.js 22 LTS and pnpm are installed.
 
 ```bash
 # 1. Install dependencies
@@ -17,13 +17,13 @@ pnpm install
 # 2. Start local development server
 pnpm dev
 
-# 3. Typecheck and build production bundle
+# 3. Check types and build production static bundle
 pnpm build
 
 # 4. Preview local production build
 pnpm preview
 
-# 5. Run bundle size & performance budget analysis
+# 5. Check performance and bundle size budgets
 pnpm build:analyze
 ```
 
@@ -36,105 +36,101 @@ Deployments are automated through GitHub Actions using `.github/workflows/deploy
 1. Push your repository to GitHub:
    ```bash
    git add .
-   git commit -m "feat: initial release"
+   git commit -m "feat: plasma aesthetic redesign with ground truth alignment"
    git branch -M main
    git remote add origin https://github.com/Prerna-Kri/Prerna_Website.git
    git push -u origin main
    ```
 2. Navigate to your repository on GitHub: **Settings → Pages**.
-3. Under **Build and deployment → Source**, select **GitHub Actions** (do not select "Deploy from a branch").
+3. Under **Build and deployment → Source**, select **GitHub Actions** (do NOT select "Deploy from a branch").
 4. **Base Path Configuration (§3.4)**:
    - If your repository is named `<username>.github.io` (e.g. `Prerna-Kri.github.io`), the site deploys at the root domain. In `astro.config.mjs`, leave `base` omitted or undefined.
-   - If your repository is a project repository (e.g. `Prerna_Website`), the site deploys at `https://Prerna-Kri.github.io/Prerna_Website/`. In `astro.config.mjs`, `base: '/Prerna_Website'` is already pre-configured.
+   - If your repository is a project repository (e.g. `Prerna_Website`), the site deploys at `https://Prerna-Kri.github.io/Prerna_Website/`. In `astro.config.mjs`, `base: '/Prerna_Website'` is pre-configured.
 5. **Custom Domain / CNAME**:
-   - If deploying with a custom domain (e.g. `prernakumari.com`), replace the content of `public/CNAME` with your domain name.
-   - If you are NOT using a custom domain and rely on GitHub Pages URLs, delete `public/CNAME` before pushing.
+   - If using a custom domain (e.g. `prernakumari.com`), enter your domain in `public/CNAME`.
+   - If relying on `Prerna-Kri.github.io/Prerna_Website/`, delete `public/CNAME`.
 
 ---
 
-## 3. How to Add a Publication
+## 3. How to Add Content
 
-All publications are stored as individual YAML files in `src/content/publications/`. Add a new file such as `src/content/publications/my-new-paper.yaml`:
-
+### Adding a Project (`src/content/projects/`)
+Create `src/content/projects/new-project.yaml`:
 ```yaml
-title: "Self-Supervised Feature Invariance for Robust Visual Object Segmentation"
-authors:
-  - "Kumari, P."
-  - "Sharma, A."
-  - "Verma, R."
-year: 2025
-venue: "IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)"
-venueShort: "CVPR"
-type: "conference" # 'journal' | 'conference' | 'preprint' | 'workshop' | 'thesis' | 'chapter'
-status: "published" # 'published' | 'accepted' | 'under-review' | 'preprint'
-topics:
+name: "Project Name"
+slug: "project-slug"
+summary: "One-sentence overview of the computational pipeline."
+description: "Detailed description of results, architecture, and validation."
+type: "research" # 'research' | 'tool' | 'replication' | 'coursework' | 'exploration'
+stack:
+  - "Python"
+  - "PyTorch"
+  - "OpenCV"
+role: "Lead Researcher"
+status: "active" # 'active' | 'paused' | 'archived'
+year: 2026
+repo: "https://github.com/Prerna-Kri/repo-name"
+featured: true # true displays on Home page
+```
+
+### Adding a Technical Note (`src/content/writing/`)
+Create `src/content/writing/my-note.mdx`:
+```markdown
+---
+title: "Deriving Multi-Scale Convolutional Receptive Fields"
+description: "Step-by-step mathematical expansion of theoretical receptive fields."
+date: 2026-05-10
+tags:
   - "computer-vision"
   - "deep-learning"
-abstract: "We introduce a self-supervised visual representation framework that preserves semantic topology across extreme geometric and illumination perturbations."
+draft: false
+---
+
+Use KaTeX math formulas ($$R_l = R_{l-1} + (k_l - 1) \prod s_i$$) and Shiki code blocks!
+```
+
+### Adding Your First Publication (`src/content/publications/`)
+> [!NOTE]
+> Currently, the `publications` collection is empty (0 entries) to honestly reflect your Year 1 PhD status. Adding your first `.yaml` paper file here automatically activates the `/publications` page and nav link!
+
+Create `src/content/publications/paper-name.yaml`:
+```yaml
+title: "Deep Vision Diagnostics for Agricultural Plant Pathology"
+authors:
+  - "Prerna Kumari"
+  - "Advisor Name"
+year: 2026
+venue: "IEEE Conference on Computer Vision and Pattern Recognition (CVPR)"
+type: "conference" # 'journal' | 'conference' | 'preprint' | 'workshop' | 'thesis'
+status: "published"
+topics:
+  - "computer-vision"
+abstract: "Abstract describing the novel visual recognition algorithm..."
 bibtex: |
-  @inproceedings{kumari2025self,
-    title={Self-Supervised Feature Invariance for Robust Visual Object Segmentation},
-    author={Kumari, Prerna and Sharma, Amit and Verma, Rohit},
-    booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-    year={2025}
+  @inproceedings{kumari2026deep,
+    title={Deep Vision Diagnostics for Agricultural Plant Pathology},
+    author={Kumari, Prerna},
+    year={2026}
   }
-doi: "10.1109/CVPR52688.2025.00142"
-arxiv: "2503.04182"
-pdf: "https://arxiv.org/pdf/2503.04182"
-code: "https://github.com/Prerna-Kri/segmentation"
-award: "Spotlight" # Optional badge: 'Oral', 'Spotlight', 'Best Paper'
-citations: 14
-featured: true # true displays on the Home page
-date: 2025-06-18 # Date used for sorting
+doi: "10.1109/..."
+code: "https://github.com/Prerna-Kri/..."
+featured: true
+date: 2026-06-15
 ```
 
 ---
 
-## 4. How to Change Colours and Fonts
+## 4. How to Customize Colours & Fonts
 
-All tokens are defined in `src/styles/global.css` using Tailwind CSS v4's `@theme` block and root CSS variables:
-
-```css
-:root {
-  /* DARK THEME (default) */
-  --bg-page: #0A1424;       /* Deep ink page background */
-  --bg-well: #0D1A2D;       /* Sunken code blocks and wells */
-  --bg-surface: #11203A;    /* Raised interactive cards */
-  --border-subtle: #1B3055; /* Hairlines, gridlines */
-  --border-strong: #2C4571; /* High-emphasis dividers */
-  --text-muted: #7D93B2;    /* Metadata, ticks, dates */
-  --text-body: #C3D2E6;     /* Body reading measure */
-  --text-heading: #F1F6FD;  /* High-emphasis headers */
-  --accent-signal: #47DFC6; /* Signal cyan: links, focus, active */
-  --accent-pulse: #7C6BFF;  /* Secondary accent: data ramp only */
-  --accent-amber: #FFB547;  /* Rare tertiary: awards, in press */
-}
-
-[data-theme="light"] {
-  /* LIGHT THEME */
-  --bg-page: #F5F7FB;
-  --bg-well: #EDF1F7;
-  --bg-surface: #FFFFFF;
-  --border-subtle: #D4DEEC;
-  --text-muted: #5A6C88;
-  --text-body: #1E2C44;
-  --text-heading: #0A1424;
-  --accent-signal: #0E9C86;
-  --accent-pulse: #5847D6;
-  --accent-amber: #B06E00;
-}
-```
-
-Self-hosted fonts are imported at the top of `src/styles/global.css`:
-- **Display**: Instrument Serif (`@fontsource/instrument-serif`)
-- **Sans**: Geist Sans Variable (`@fontsource-variable/geist`)
-- **Mono**: JetBrains Mono Variable (`@fontsource-variable/jetbrains-mono`)
+All design tokens are centralized in `src/styles/global.css`:
+- **Palette**: Under `@theme`, update `--color-void-*` (dark neutrals), `--color-plasma-*` (spectral ramp), and `--color-volt-*` (cyan interactive accent).
+- **Light Theme**: Under `[data-theme="light"]`, adjust `--bg-page`, `--text-heading`, and the light-mode ramp.
+- **Fonts**: Self-hosted through Fontsource: Archivo Variable (`--font-display`), Geist Sans Variable (`--font-sans`), and JetBrains Mono Variable (`--font-mono`).
 
 ---
 
 ## 5. Troubleshooting
 
-- **Broken links or assets on GitHub Pages**: Ensure every link and asset uses the `withBase()` utility in `src/lib/paths.ts`. If deployed to `https://<username>.github.io/<repo>/`, verify `base: '/<repo>'` matches the repository name in `astro.config.mjs`.
-- **404 error when refreshing nested URLs on Pages**: Astro builds purely static pages (`/research/index.html`, `/publications/index.html`). GitHub Pages automatically serves these paths cleanly without requiring an SPA fallback router.
-- **Font display and swap**: Fonts are self-hosted woff2 files in `node_modules` bundled at build time. No external requests are made to Google Fonts CDN, ensuring offline reliability, privacy, and zero layout shift.
-- **Flashing theme on initial load**: Theme initialization is executed in a synchronous, blocking script in the `<head>` of `BaseLayout.astro` that reads `localStorage.getItem('theme')` prior to DOM rendering.
+- **404 on Sub-Pages or Refresh on GitHub Pages**: Ensure GitHub Pages is using GitHub Actions as the source under Settings → Pages.
+- **Broken Sub-Path Links**: Never hard-code `/about` or `/cv.pdf`. Always import and use `withBase('/path')` from `src/lib/paths.ts`.
+- **Fonts Failing to Load**: Fonts are bundled locally from `@fontsource-variable/*` into the production build; ensure `@import` statements remain in `src/styles/global.css`.

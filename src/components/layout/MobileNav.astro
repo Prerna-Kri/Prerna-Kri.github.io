@@ -1,5 +1,6 @@
 ---
 import { withBase } from '../../lib/paths';
+import { hasEntries } from '../../lib/collections';
 import Icon from '../common/Icon.astro';
 
 interface Props {
@@ -8,17 +9,30 @@ interface Props {
 
 const { currentPath = '' } = Astro.props;
 
-const navItems = [
+const hasPubs = await hasEntries('publications');
+const hasNotes = await hasEntries('writing');
+
+const navItems: { href: string; label: string; raw: string }[] = [
   { href: withBase('/'), label: 'Home', raw: '/' },
   { href: withBase('/research'), label: 'Research', raw: '/research' },
-  { href: withBase('/publications'), label: 'Publications', raw: '/publications' },
-  { href: withBase('/projects'), label: 'Projects', raw: '/projects' },
-  { href: withBase('/talks'), label: 'Talks', raw: '/talks' },
-  { href: withBase('/writing'), label: 'Writing', raw: '/writing' },
-  { href: withBase('/cv'), label: 'CV', raw: '/cv' },
+  { href: withBase('/work'), label: 'Work', raw: '/work' },
 ];
 
+if (hasPubs) {
+  navItems.push({ href: withBase('/publications'), label: 'Publications', raw: '/publications' });
+}
+
+if (hasNotes) {
+  navItems.push({ href: withBase('/writing'), label: 'Writing', raw: '/writing' });
+}
+
+navItems.push(
+  { href: withBase('/cv'), label: 'CV', raw: '/cv' },
+  { href: withBase('/#contact'), label: 'Contact', raw: '/#contact' }
+);
+
 function isActive(itemRaw: string): boolean {
+  if (itemRaw === '/#contact') return false;
   if (currentPath === itemRaw || currentPath === `${itemRaw}/`) return true;
   if (itemRaw !== '/' && currentPath.startsWith(itemRaw)) return true;
   return false;
@@ -30,7 +44,7 @@ function isActive(itemRaw: string): boolean {
   <button
     id="mobile-nav-toggle"
     type="button"
-    class="flex items-center justify-center w-9 h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors cursor-pointer"
+    class="flex items-center justify-center w-9 h-9 rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors cursor-pointer"
     aria-label="Open navigation menu"
     aria-expanded="false"
     aria-controls="mobile-nav-drawer"
@@ -38,27 +52,27 @@ function isActive(itemRaw: string): boolean {
     <Icon name="menu" size={20} />
   </button>
 
-  <!-- Slide-out Drawer Panel (280ms transition) -->
+  <!-- Slide-out Drawer Panel (280ms transition, 100dvh) -->
   <div
     id="mobile-nav-drawer"
-    class="fixed inset-y-0 right-0 z-50 w-full max-w-xs bg-[var(--bg-well)] border-l border-[var(--border-strong)] shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-[280ms] ease-[var(--ease-out-quint)] pointer-events-none"
+    class="fixed inset-y-0 right-0 z-50 w-full max-w-xs h-[100dvh] bg-[var(--bg-well)] border-l border-[var(--border-emphasis)] shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-[280ms] ease-[var(--ease-out-quint)] pointer-events-none"
     aria-hidden="true"
     tabindex="-1"
   >
     <div>
-      <div class="flex items-center justify-between pb-6 border-b border-[var(--border-subtle)]">
+      <div class="flex items-center justify-between pb-6 border-b border-[var(--border-hairline)]">
         <span class="font-mono text-[var(--step--1)] text-[var(--text-muted)]">NAVIGATION</span>
         <button
           id="mobile-nav-close"
           type="button"
-          class="p-1 rounded-[4px] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-surface)] transition-colors"
+          class="p-1 rounded-[4px] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-surface)] transition-colors cursor-pointer"
           aria-label="Close navigation menu"
         >
           <Icon name="close" size={20} />
         </button>
       </div>
 
-      <nav aria-label="Mobile Navigation" class="flex flex-col gap-4 mt-6">
+      <nav aria-label="Mobile Navigation" class="flex flex-col gap-3 mt-6">
         {
           navItems.map((item) => {
             const active = isActive(item.raw);
@@ -67,7 +81,7 @@ function isActive(itemRaw: string): boolean {
                 href={item.href}
                 class={`mobile-nav-link text-[var(--step-0)] py-2 px-3 rounded-[4px] border-l-2 transition-colors ${
                   active
-                    ? 'border-[var(--accent-signal)] bg-[var(--bg-surface)] text-[var(--text-heading)] font-semibold'
+                    ? 'border-[var(--interactive)] bg-[var(--bg-surface)] text-[var(--text-heading)] font-semibold'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-surface)]'
                 }`}
                 aria-current={active ? 'page' : undefined}
@@ -80,7 +94,7 @@ function isActive(itemRaw: string): boolean {
       </nav>
     </div>
 
-    <div class="pt-6 border-t border-[var(--border-subtle)] text-[var(--step--1)] text-[var(--text-muted)] font-mono">
+    <div class="pt-6 border-t border-[var(--border-hairline)] text-[var(--step--1)] text-[var(--text-muted)] font-mono">
       <span>Prerna Kumari · IISER Bhopal</span>
     </div>
   </div>

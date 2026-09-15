@@ -1,8 +1,8 @@
-/* Styling for long-form prose and MDX writing */
+/* Styling for long-form prose and MDX writing per §7.6 */
 .prose {
   color: var(--text-body);
-  max-width: 68ch;
-  line-height: 1.75;
+  max-width: 70ch;
+  line-height: 1.62;
   font-size: var(--step-0);
 }
 
@@ -13,27 +13,29 @@
 
 .prose h1, .prose h2, .prose h3, .prose h4 {
   color: var(--text-heading);
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 6rem;
 }
 
 .prose h2 {
   font-family: var(--font-display);
-  font-size: var(--step-3);
+  font-weight: 700;
+  font-size: var(--step-2);
   margin-top: 2.2em;
   margin-bottom: 0.8em;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-hairline);
   padding-bottom: 0.3em;
 }
 
 .prose h3 {
   font-family: var(--font-display);
-  font-size: var(--step-2);
+  font-weight: 700;
+  font-size: var(--step-1);
   margin-top: 1.8em;
   margin-bottom: 0.6em;
 }
 
 .prose a {
-  color: var(--accent-signal);
+  color: var(--interactive);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: opacity var(--dur-fast) ease;
@@ -43,8 +45,9 @@
   opacity: 0.8;
 }
 
+/* Blockquote with 2px left rule in --plasma-1 per §7.6 */
 .prose blockquote {
-  border-left: 3px solid rgba(71, 223, 198, 0.4);
+  border-left: 2px solid var(--accent-plasma-1, #FF2E8B);
   padding-left: 1.25rem;
   margin-left: 0;
   margin-right: 0;
@@ -54,13 +57,13 @@
 
 .prose pre {
   background-color: var(--bg-well);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-hairline);
   border-radius: 4px;
-  padding: 1rem;
+  padding: 1.25rem;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: var(--step--1);
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
 }
 
 .prose code:not(pre code) {
@@ -69,8 +72,8 @@
   background-color: var(--bg-well);
   padding: 0.15em 0.4em;
   border-radius: 3px;
-  border: 1px solid var(--border-subtle);
-  color: var(--accent-signal);
+  border: 1px solid var(--border-hairline);
+  color: var(--interactive);
 }
 
 .prose ul, .prose ol {
@@ -84,6 +87,6 @@
 
 .prose hr {
   border: 0;
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-hairline);
   margin: 2.5rem 0;
 }

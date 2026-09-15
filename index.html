@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prerna Kumari | PhD Scholar in Data Science & Engineering | IISER Bhopal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f7fa',
+                            100: '#e5ecf3',
+                            200: '#cfddf0',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                        },
+                        subtle: {
+                            bg: '#fbfcfd',
+                            card: '#ffffff',
+                            border: '#e2e8f0',
+                            muted: '#64748b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .soft-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.25s ease-in-out;
+        }
+        .soft-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.05), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+            transform: translateY(-2px);
+        }
+        .gradient-heading {
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-800 bg-slate-50 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 glass-header border-b border-slate-200/80 transition-colors">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Logo -->
+                <a href="#about" class="font-bold text-lg tracking-tight text-slate-900 hover:text-brand-700 transition-colors">
+                    Prerna<span class="text-brand-600">.Kumari</span>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-7 text-sm font-medium">
+                    <a href="#about" class="text-slate-600 hover:text-brand-700 transition-colors">About</a>
+                    <a href="#education" class="text-slate-600 hover:text-brand-700 transition-colors">Education</a>
+                    <a href="#projects" class="text-slate-600 hover:text-brand-700 transition-colors">Projects</a>
+                    <a href="#achievements" class="text-slate-600 hover:text-brand-700 transition-colors">Achievements</a>
+                    <a href="#contact" class="text-slate-600 hover:text-brand-700 transition-colors">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex md:hidden items-center">
+                    <button id="mobile-menu-btn" aria-label="Toggle Navigation" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 bg-white border-b border-slate-200">
+            <a href="#about" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50">About</a>
+            <a href="#education" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50">Education</a>
+            <a href="#projects" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50">Projects</a>
+            <a href="#achievements" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50">Achievements</a>
+            <a href="#contact" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- About / Hero Section -->
+        <section id="about" class="scroll-mt-24 pt-2">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8 lg:gap-12">
+                
+                <!-- Profile Image Display with Upload Preview Capability -->
+                <div class="flex flex-col items-center">
+                    <div class="relative group w-44 h-44 sm:w-48 sm:h-48 rounded-full p-1.5 bg-white border-2 border-slate-200 shadow-md overflow-hidden">
+                        <!-- Profile Image -->
+                        <img id="profile-img" src="1000093019.webp" alt="Prerna Kumari" class="w-full h-full object-cover rounded-full bg-slate-100 transition transform duration-300 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/400x400/1e3a8a/ffffff?text=Prerna+Kumari';">
+                        
+                        <input type="file" id="image-upload" accept="image/*" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Bio Content -->
+                <div class="flex-1 text-center md:text-left space-y-4">
+                    <div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight gradient-heading">
+                            Prerna Kumari
+                        </h1>
+                        <p class="text-lg font-semibold text-brand-700 mt-1">
+                            PhD Research Scholar @ IISER Bhopal
+                        </p>
+                        <p class="text-sm text-slate-600 mt-1 flex items-center justify-center md:justify-start gap-2">
+                            <i class="fa-solid fa-building-columns text-slate-400"></i>
+                            Department of Data Science and Engineering
+                        </p>
+                    </div>
+
+                    <p class="text-slate-600 leading-relaxed text-base max-w-2xl">
+                        I am Prerna Kumari, a research scholar in the Department of Data Science and Engineering at IISER Bhopal (Joined 2026). I have prior interest in exploring the fields and applications of <strong>Computer Vision</strong> and <strong>Deep Learning</strong>.
+                    </p>
+
+                    <!-- Focus Badges -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1 text-xs">
+                        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200">
+                            <i class="fa-solid fa-eye mr-1.5 text-brand-600"></i> Computer Vision
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200">
+                            <i class="fa-solid fa-brain mr-1.5 text-brand-600"></i> Deep Learning
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200">
+                            <i class="fa-solid fa-location-dot mr-1 text-red-500"></i> IISER Bhopal, India
+                        </span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-3">
+                        <a href="mailto:prerna26@iiserb.ac.in" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-700 hover:bg-brand-800 text-white font-medium text-sm transition-all shadow-sm">
+                            <i class="fa-solid fa-envelope"></i> Contact Me
+                        </a>
+
+                        <div class="flex items-center space-x-2 ml-1">
+                            <a href="https://github.com/Prerna-Kri" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors" title="GitHub Profile">
+                                <i class="fa-brands fa-github text-lg"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/prerna-kumari-30589a224" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors" title="LinkedIn Profile">
+                                <i class="fa-brands fa-linkedin text-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="scroll-mt-24">
+            <div class="border-b border-slate-200 pb-3 mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-solid fa-graduation-cap text-brand-700 text-xl"></i> Education
+                </h2>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- PhD -->
+                <div class="soft-card p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-brand-700">Doctor of Philosophy (Ph.D.)</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-0.5">IISER Bhopal</h3>
+                        <p class="text-sm text-slate-600">Department of Data Science and Engineering</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-100">2026 – Present</span>
+                    </div>
+                </div>
+
+                <!-- M.Sc -->
+                <div class="soft-card p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Master of Science (M.Sc.)</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-0.5">Mathematics and Computing</h3>
+                        <p class="text-sm text-slate-600">Banaras Hindu University (BHU), Varanasi</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">2022 – 2024</span>
+                    </div>
+                </div>
+
+                <!-- B.Sc -->
+                <div class="soft-card p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Bachelor of Science (B.Sc.)</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-0.5">Bachelor's in Mathematics</h3>
+                        <p class="text-sm text-slate-600">Patna Women's College, Patna</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">2019 – 2022</span>
+                    </div>
+                </div>
+
+                <!-- Schooling -->
+                <div class="soft-card p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">School Education</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-0.5">DAV Public School</h3>
+                        <p class="text-sm text-slate-600">Sindri, Jharkhand</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">Completed</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="scroll-mt-24">
+            <div class="border-b border-slate-200 pb-3 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+                        <i class="fa-solid fa-code text-brand-700 text-xl"></i> Projects & Computational Work
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Research implementations, machine learning, and computer vision models</p>
+                </div>
+
+                <!-- Interactive Filters -->
+                <div id="project-filters" class="flex flex-wrap gap-1.5 text-xs font-medium">
+                    <button data-filter="all" class="filter-btn active px-3 py-1.5 rounded-lg bg-brand-700 text-white transition-colors">All</button>
+                    <button data-filter="cv" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">Computer Vision</button>
+                    <button data-filter="ml" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">Machine Learning</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- Project 1: Chilli Thrips Classification -->
+                <div class="project-card soft-card p-6 rounded-xl flex flex-col justify-between" data-category="cv">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded border border-brand-100">Computer Vision</span>
+                            <a href="https://github.com/Prerna-Kri" target="_blank" class="text-slate-400 hover:text-slate-700" title="View Source"><i class="fa-brands fa-github text-lg"></i></a>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Chilli Thrips Classification</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                            Deep Learning and Computer Vision framework for identifying and classifying chili leaf damage caused by thrips pests to assist in automated agricultural disease diagnosis.
+                        </p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500 font-mono">Python / PyTorch / OpenCV</span>
+                        <a href="https://github.com/Prerna-Kri" target="_blank" class="text-brand-700 font-semibold hover:underline">Code & Details &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Project 2: Road Accident Prediction -->
+                <div class="project-card soft-card p-6 rounded-xl flex flex-col justify-between" data-category="ml">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-100">Machine Learning</span>
+                            <a href="https://github.com/Prerna-Kri" target="_blank" class="text-slate-400 hover:text-slate-700" title="View Source"><i class="fa-brands fa-github text-lg"></i></a>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Road Accident Prediction & Severity Analysis</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                            Predictive analytics framework for modeling road accident probabilities and severity factors using geographical, environmental, and traffic density data.
+                        </p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500 font-mono">Python / Scikit-Learn / Pandas</span>
+                        <a href="https://github.com/Prerna-Kri" target="_blank" class="text-brand-700 font-semibold hover:underline">Code & Details &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Project 3: Real-Time Object Detection -->
+                <div class="project-card soft-card p-6 rounded-xl flex flex-col justify-between" data-category="cv">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded border border-brand-100">Computer Vision</span>
+                            <a href="https://github.com/Prerna-Kri" target="_blank" class="text-slate-400 hover:text-slate-700" title="View Source"><i class="fa-brands fa-github text-lg"></i></a>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Real-Time Object Detection & Tracking</h3>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                            Deep neural network implementation for real-time multi-class object detection, bounding box prediction, and tracking in video feeds.
+                        </p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500 font-mono">Python / YOLO / Deep Learning</span>
+                        <a href="https://github.com/Prerna-Kri" target="_blank" class="text-brand-700 font-semibold hover:underline">Code & Details &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Key Achievements Section -->
+        <section id="achievements" class="scroll-mt-24">
+            <div class="border-b border-slate-200 pb-3 mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-solid fa-award text-amber-500 text-xl"></i> Key Achievements & Certifications
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- Achievement 1 -->
+                <div class="soft-card p-5 rounded-xl flex items-start gap-4">
+                    <div class="p-3 bg-amber-50 text-amber-600 rounded-lg shrink-0">
+                        <i class="fa-solid fa-trophy text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">UGC NET CS Qualified</h3>
+                        <p class="text-brand-700 text-xs font-semibold">Qualified 3 Times</p>
+                        <p class="text-slate-600 text-xs mt-1">National Eligibility Test for Assistant Professorship and JRF eligibility in Computer Science & Applications.</p>
+                    </div>
+                </div>
+
+                <!-- Achievement 2 -->
+                <div class="soft-card p-5 rounded-xl flex items-start gap-4">
+                    <div class="p-3 bg-emerald-50 text-emerald-600 rounded-lg shrink-0">
+                        <i class="fa-solid fa-certificate text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">GATE Data Science & AI (DA)</h3>
+                        <p class="text-emerald-700 text-xs font-semibold">Qualified 2025</p>
+                        <p class="text-slate-600 text-xs mt-1">Graduate Aptitude Test in Engineering in Data Science & Artificial Intelligence discipline.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="scroll-mt-24">
+            <div class="border-b border-slate-200 pb-3 mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-solid fa-paper-plane text-brand-700 text-xl"></i> Get In Touch
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Card 1: Email -->
+                <div class="soft-card p-5 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center mb-3 text-base">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Email Address</h3>
+                        <p id="email-text" class="text-slate-600 text-xs mt-1 font-mono select-all">prerna26@iiserb.ac.in</p>
+                    </div>
+                    <button id="copy-email-btn" class="mt-4 text-xs font-semibold px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-copy"></i> <span>Copy Email</span>
+                    </button>
+                </div>
+
+                <!-- Card 2: Office Location -->
+                <div class="soft-card p-5 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center mb-3 text-base">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Location</h3>
+                        <p class="text-slate-600 text-xs mt-1 leading-relaxed">
+                            Dept. of Data Science & Engineering,<br>
+                            IISER Bhopal, Bhauri, Bhopal - 462066,<br>
+                            Madhya Pradesh, India.
+                        </p>
+                    </div>
+                    <a href="https://www.iiserb.ac.in" target="_blank" class="mt-4 text-xs font-semibold text-brand-700 hover:underline flex items-center gap-1">
+                        <span>IISER Bhopal Website</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3: Profiles -->
+                <div class="soft-card p-5 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center mb-3 text-base">
+                            <i class="fa-solid fa-hashtag"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Profiles</h3>
+                        <div class="mt-2 space-y-2 text-xs">
+                            <a href="https://github.com/Prerna-Kri" target="_blank" class="flex items-center gap-2 text-slate-600 hover:text-brand-700">
+                                <i class="fa-brands fa-github text-base w-4"></i> @Prerna-Kri
+                            </a>
+                            <a href="https://www.linkedin.com/in/prerna-kumari-30589a224" target="_blank" class="flex items-center gap-2 text-slate-600 hover:text-brand-700">
+                                <i class="fa-brands fa-linkedin text-base w-4"></i> Prerna Kumari
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Step-by-Step GitHub Pages Deployment Accordion -->
+       
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 py-6 bg-white mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>&copy; <span id="year"></span> Prerna Kumari. All rights reserved.</p>
+            <p class="mt-1">PhD Scholar in Data Science & Engineering, IISER Bhopal</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Set dynamic current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Navigation Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Copy Email to Clipboard Feature
+        const copyBtn = document.getElementById('copy-email-btn');
+        const emailText = document.getElementById('email-text').innerText;
+
+        copyBtn.addEventListener('click', () => {
+            const tempInput = document.createElement('input');
+            tempInput.value = emailText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const span = copyBtn.querySelector('span');
+            const originalText = span.innerText;
+            span.innerText = 'Copied!';
+            copyBtn.classList.add('bg-emerald-100', 'text-emerald-800');
+            
+            setTimeout(() => {
+                span.innerText = originalText;
+                copyBtn.classList.remove('bg-emerald-100', 'text-emerald-800');
+            }, 2000);
+        });
+
+        // Interactive Image Preview Script for local testing
+        const imageUpload = document.getElementById('image-upload');
+        const profileImg = document.getElementById('profile-img');
+
+        imageUpload.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    profileImg.src = evt.target.result;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Project Interactive Filter Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-brand-700', 'text-white');
+                    b.classList.add('bg-slate-100', 'text-slate-700');
+                });
+                
+                btn.classList.add('active', 'bg-brand-700', 'text-white');
+                btn.classList.remove('bg-slate-100', 'text-slate-700');
+
+                const filter = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

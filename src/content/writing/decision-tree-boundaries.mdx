@@ -1,0 +1,46 @@
+---
+title: "Evaluating Partition Boundaries in Clinical Decision Trees"
+description: "Mathematical formulation of split criteria and pruning boundaries for risk prediction on tabular data."
+date: 2025-04-10
+tags:
+  - "machine-learning"
+  - "decision-trees"
+  - "tabular-data"
+draft: false
+---
+
+Decision tree algorithms segment feature space into axis-aligned hyper-rectangles. In medical screening datasets—such as diagnostic risk forecasting for metabolic disorders—minimizing impurity at each split ensures reproducible risk attribution across patient cohorts.
+
+## Impurity Metrics: Gini vs. Cross-Entropy
+
+Let node $m$ represent a region $R_m$ containing $N_m$ clinical observations. The proportion of class $k \in \{1, \dots, K\}$ instances in node $m$ is:
+
+$$
+\hat{p}_{mk} = \frac{1}{N_m} \sum_{x_i \in R_m} \mathbb{I}(y_i = k)
+$$
+
+The node impurity can be quantified via the Gini index $I_G(m)$ or cross-entropy $H(m)$:
+
+$$
+I_G(m) = \sum_{k=1}^K \hat{p}_{mk}(1 - \hat{p}_{mk}) = 1 - \sum_{k=1}^K \hat{p}_{mk}^2
+$$
+
+$$
+H(m) = -\sum_{k=1}^K \hat{p}_{mk} \log_2(\hat{p}_{mk})
+$$
+
+When evaluating a split candidate along feature $j$ at threshold $t$, the algorithm selects the pair $(j^*, t^*)$ that maximizes the impurity reduction:
+
+$$
+\Delta I(m, j, t) = I(m) - \frac{N_{m, L}}{N_m} I(m_L) - \frac{N_{m, R}}{N_m} I(m_R)
+$$
+
+## Cross-Validation & Pruning
+
+Unconstrained trees rapidly partition continuous clinical metrics (such as blood glucose or insulin resistance markers) into single-observation leaves, causing catastrophic variance inflation. Cost-complexity pruning addresses this by penalizing subtree size $|T|$:
+
+$$
+R_\alpha(T) = \sum_{m=1}^{|T|} N_m I(m) + \alpha |T|
+$$
+
+Tuning $\alpha$ across 5-fold cross-validation yields models that generalize reliably without overfitting local sensor anomalies.

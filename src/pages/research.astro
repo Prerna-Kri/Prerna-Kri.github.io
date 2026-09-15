@@ -1,207 +1,154 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/common/SectionHeading.astro';
-import Figure from '../components/common/Figure.astro';
-import PubRow from '../components/publications/PubRow.astro';
 import TableOfContents from '../components/common/TableOfContents.astro';
-import StackTags from '../components/projects/StackTags.astro';
+import Figure from '../components/common/Figure.astro';
 
-const allPublications = await getCollection('publications');
+const directions = await getCollection('directions');
+const sortedDirections = directions.sort((a, b) => a.data.order - b.data.order);
 
-const pillar1Pubs = allPublications.filter((p) => p.data.topics.includes('computer-vision'));
-const pillar2Pubs = allPublications.filter((p) => p.data.topics.includes('mathematical-foundations') || p.data.topics.includes('deep-learning'));
-const pillar3Pubs = allPublications.filter((p) => p.data.topics.includes('predictive-analytics'));
+const allProjects = await getCollection('projects');
 
-const tocHeadings = [
-  { id: 'pillar-1', label: '1. Geometric Invariance' },
-  { id: 'pillar-2', label: '2. Visual Topology' },
-  { id: 'pillar-3', label: '3. Applied Modeling' },
-];
-
-const sections = [
-  { id: 'pillar-1', label: '01. GEOMETRY' },
-  { id: 'pillar-2', label: '02. TOPOLOGY' },
-  { id: 'pillar-3', label: '03. APPLIED' },
-];
+const tocHeadings = sortedDirections.map((d) => ({
+  id: d.data.slug,
+  label: d.data.title,
+}));
 ---
 
 <BaseLayout
-  title="Research"
-  description="Foundational investigations bridging geometric deep learning, topological representation spaces, and precision computer vision."
-  sections={sections}
+  title="Research Program"
+  description="Core research investigations spanning computer vision diagnostics, deep learning object tracking, and applied predictive modeling."
 >
-  <div class="grid grid-cols-1 xl:grid-cols-12 gap-12 py-12 md:py-16">
-    <!-- Sticky Table of Contents at xl and above per §7.2 -->
-    <aside class="hidden xl:block xl:col-span-3">
-      <TableOfContents headings={tocHeadings} />
-    </aside>
-
-    <!-- Main Content (Columns 2-9 on desktop) -->
-    <div class="xl:col-span-9 space-y-16 max-w-[68ch]">
-      <header class="space-y-4 border-b border-[var(--border-subtle)] pb-8">
-        <h1 class="font-display text-[var(--step-5)] text-[var(--text-heading)] tracking-tight">
-          Research Program
-        </h1>
-        <p class="text-[var(--step-1)] text-[var(--text-body)] leading-relaxed">
-          My research explores the intersection of mathematical topology, differential geometry, and deep learning architectures. By embedding physical and mathematical invariants directly into visual networks, we create models that remain robust under extreme out-of-distribution variations and severe data scarcity.
-        </p>
-      </header>
-
-      <!-- Pillar 1 -->
-      <section id="pillar-1" class="space-y-6 scroll-mt-24">
-        <SectionHeading
-          tag="PILLAR 01"
-          title="Geometric Invariance & Continuous Equivariance"
-        />
-
-        <div class="space-y-4 text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
-          <p>
-            Standard convolutional filters and vision transformer tokens assume that visual signals exist solely on discrete regular coordinate grids. When natural images undergo rotations, scaling, or perspective shearing, this discretization causes high-frequency harmonic distortion in internal latent representations.
-          </p>
-          <p>
-            Our work formulates continuous equivariant operators based on infinite-dimensional Banach spaces. By computing kernel convolutions directly in the harmonic frequency domain, visual backbones maintain consistent coordinate transformations without requiring exponential dataset augmentations.
-          </p>
-          <p>
-            This formulation guarantees resolution independence, enabling networks trained on low-fidelity sensor captures to perform zero-shot segmentation and localization on ultra-high-resolution microscopy and aerial photography.
-          </p>
+  <div class="frame pt-28 pb-20">
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+      <!-- Sticky Table of Contents at xl+ per §7.2 -->
+      <aside class="hidden xl:block xl:col-span-3">
+        <div class="sticky top-28 space-y-4">
+          <div class="font-mono text-xs uppercase text-[var(--text-muted)] tracking-wider">
+            Contents
+          </div>
+          <TableOfContents headings={tocHeadings} />
         </div>
+      </aside>
 
-        <!-- Figure 1 -->
-        <Figure
-          figureNumber={1}
-          caption="Equivariant vector field mapping under continuous SE(2) transformations. Note the preservation of singular topological points across rotational iterations."
-        >
-          <div class="h-40 flex items-center justify-center font-mono text-xs text-[var(--text-muted)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-            <div class="text-center space-y-1">
-              <div class="text-[var(--accent-signal)] font-semibold">FIG. 01 // SE(2) CONTINUOUS OPERATOR MANIFOLD</div>
-              <div class="text-[11px]">Harmonic Fourier Basis: f(x) * K(x,y) → Continuous Latent Projection</div>
-            </div>
-          </div>
-        </Figure>
-
-        <!-- Methods mono tags per §7.2 -->
-        <div class="space-y-2 pt-2">
-          <div class="font-mono text-[10px] uppercase text-[var(--text-muted)] tracking-wider">
-            Core Methods & Tooling
-          </div>
-          <StackTags stack={['Lie Groups', 'SE(2) Equivariance', 'Fourier Operators', 'PyTorch Geometry']} />
-        </div>
-
-        <!-- Related Publications per §7.2 -->
-        <div class="space-y-3 pt-6 border-t border-[var(--border-subtle)]/40">
-          <div class="font-mono text-xs uppercase text-[var(--accent-signal)] tracking-wider">
-            Related Publications
-          </div>
-          <div class="space-y-1">
-            {pillar1Pubs.slice(0, 2).map((pub) => (
-              <PubRow pub={pub} compact={true} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <!-- Pillar 2 -->
-      <section id="pillar-2" class="space-y-6 scroll-mt-24">
-        <SectionHeading
-          tag="PILLAR 02"
-          title="Visual Topology & Loss Surface Geometry"
-        />
-
-        <div class="space-y-4 text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
-          <p>
-            Contrastive self-supervised learning algorithms typically optimize pairwise cosine similarity or infomax metrics. However, these objectives lack topological constraints, frequently causing clusters of semantically distinct classes to collapse along degenerate low-dimensional boundaries.
+      <!-- Main Long-form Content (≤70ch) -->
+      <div class="xl:col-span-9 space-y-16 max-w-[70ch]">
+        <header class="space-y-4 border-b border-[var(--border-hairline)] pb-8">
+          <h1
+            class="text-[var(--step-4)] sm:text-[var(--step-5)] font-bold text-[var(--text-heading)] tracking-tight"
+            style="font-family: var(--font-display); font-weight: 700;"
+          >
+            Research Program
+          </h1>
+          <p class="text-[var(--step-1)] text-[var(--text-body)] leading-relaxed">
+            My research develops foundational and applied machine learning methodologies across computer vision, deep neural representations, and predictive analytics. Rooted in mathematical computing, this work targets high-accuracy visual diagnosis and reliable structured data modeling under unstructured field conditions.
           </p>
-          <p>
-            We leverage algebraic topology—specifically persistent homology and Betti number filtration—to construct loss functions that penalize topological collapses during representation learning. By measuring the birth and death radii of multi-dimensional topological holes in mini-batch feature manifolds, we preserve intrinsic cluster geometry.
-          </p>
-          <p>
-            Empirical evaluations demonstrate that topologically regularized models achieve significantly higher linear probe accuracy and out-of-distribution resilience across benchmark vision challenges.
-          </p>
+        </header>
+
+        <!-- Direction Sections (§7.2) -->
+        <div class="space-y-20">
+          {
+            sortedDirections.map((dir, index) => {
+              // Related projects matching this research direction
+              const relatedProjects = allProjects.filter((p) => {
+                if (dir.data.slug === 'agricultural-vision') return p.data.slug === 'chilli-thrips-detection';
+                if (dir.data.slug === 'object-tracking') return p.data.slug === 'real-time-object-tracking';
+                if (dir.data.slug === 'predictive-modeling') return p.data.slug === 'road-accident-prediction' || p.data.slug === 'future-diabetes-prediction';
+                return false;
+              });
+
+              return (
+                <section id={dir.data.slug} class="space-y-6 scroll-mt-28">
+                  <div class="space-y-2">
+                    <span class="font-mono text-xs uppercase text-[var(--interactive)] tracking-wider">
+                      Direction 0{index + 1}
+                    </span>
+                    <h2
+                      class="text-[var(--step-3)] font-bold text-[var(--text-heading)] leading-snug"
+                      style="font-family: var(--font-display); font-weight: 700;"
+                    >
+                      {dir.data.title}
+                    </h2>
+                  </div>
+
+                  <!-- 3-5 paragraphs written for technically literate non-specialist -->
+                  <div class="space-y-4 text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
+                    <p>{dir.data.blurb}</p>
+                    <p>{dir.data.body}</p>
+                    <p>
+                      In unstructured observational environments, noise and illumination variance degrade naive model predictions. By constructing tailored neural feature representations and disciplined validation splits, our methodology ensures models isolate genuine causal signals rather than spurious background correlations.
+                    </p>
+                  </div>
+
+                  <!-- Figure with numbered caption in mono (§7.2) -->
+                  <Figure
+                    figureNumber={index + 1}
+                    caption={`Algorithmic workflow and feature representation schematic for ${dir.data.title.toLowerCase()}.`}
+                  >
+                    <div class="h-36 flex items-center justify-center font-mono text-xs text-[var(--text-muted)] border border-[var(--border-hairline)] bg-[var(--bg-well)] rounded-none">
+                      <div class="text-center space-y-1 px-4">
+                        <div class="text-[var(--text-heading)] font-semibold">
+                          FIG. 0{index + 1} // PIPELINE SCHEMATIC
+                        </div>
+                        <div class="text-[11px] text-[var(--text-muted)]">
+                          Input Representation &rarr; Feature Map Extraction &rarr; Target Inference
+                        </div>
+                      </div>
+                    </div>
+                  </Figure>
+
+                  <!-- Mono method tags per §7.2 -->
+                  <div class="space-y-2 pt-2">
+                    <div class="font-mono text-xs uppercase text-[var(--text-muted)]">
+                      Methods & Technologies
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                      {dir.data.methods.map((method) => (
+                        <span class="font-mono text-xs text-[var(--text-muted)] bg-[var(--bg-well)] px-2.5 py-1 rounded-[4px] border border-[var(--border-hairline)]">
+                          {method}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <!-- Related output / projects (§7.2) -->
+                  {relatedProjects.length > 0 && (
+                    <div class="space-y-3 pt-6 border-t border-[var(--border-hairline)]">
+                      <div class="font-mono text-xs uppercase text-[var(--interactive)]">
+                        Related Implementations
+                      </div>
+                      <div class="space-y-3">
+                        {relatedProjects.map((p) => (
+                          <div class="p-4 rounded-[4px] border border-[var(--border-hairline)] bg-[var(--bg-well)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                              <div class="font-bold text-[var(--text-heading)] text-[var(--step-0)]">
+                                {p.data.name}
+                              </div>
+                              <p class="text-xs text-[var(--text-muted)] mt-0.5">
+                                {p.data.summary}
+                              </p>
+                            </div>
+                            {p.data.repo && (
+                              <a
+                                href={p.data.repo}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="link-volt text-xs font-mono shrink-0"
+                              >
+                                Source Code &rarr;
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </section>
+              );
+            })
+          }
         </div>
-
-        <!-- Figure 2 -->
-        <Figure
-          figureNumber={2}
-          caption="Vietoris-Rips filtration sequence across latent distance threshold ε, demonstrating persistent Betti-0 and Betti-1 homology preservation."
-        >
-          <div class="h-40 flex items-center justify-center font-mono text-xs text-[var(--text-muted)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-            <div class="text-center space-y-1">
-              <div class="text-[var(--accent-signal)] font-semibold">FIG. 02 // PERSISTENT HOMOLOGY FILTRATION COMPLEX</div>
-              <div class="text-[11px]">Simplicial Complex VR(X, ε) → Topological Loss Minimization</div>
-            </div>
-          </div>
-        </Figure>
-
-        <div class="space-y-2 pt-2">
-          <div class="font-mono text-[10px] uppercase text-[var(--text-muted)] tracking-wider">
-            Core Methods & Tooling
-          </div>
-          <StackTags stack={['Persistent Homology', 'Riemannian Manifolds', 'Spectral Graph Theory', 'GUDHI']} />
-        </div>
-
-        <div class="space-y-3 pt-6 border-t border-[var(--border-subtle)]/40">
-          <div class="font-mono text-xs uppercase text-[var(--accent-signal)] tracking-wider">
-            Related Publications
-          </div>
-          <div class="space-y-1">
-            {pillar2Pubs.slice(0, 2).map((pub) => (
-              <PubRow pub={pub} compact={true} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <!-- Pillar 3 -->
-      <section id="pillar-3" class="space-y-6 scroll-mt-24">
-        <SectionHeading
-          tag="PILLAR 03"
-          title="Applied Visual Intelligence & Predictive Analytics"
-        />
-
-        <div class="space-y-4 text-[var(--step-0)] text-[var(--text-body)] leading-relaxed">
-          <p>
-            Translating mathematical rigor into practical societal impact requires solving hard domain constraints: low-power edge hardware, noisy agricultural sensors, and sparse municipal accident incident registries.
-          </p>
-          <p>
-            Our applied efforts focus on automated agricultural diagnostics—specifically identifying microscopic pest lesions such as chili thrips under natural crop canopy conditions—as well as spatio-temporal transportation safety forecasting using graph neural network representations.
-          </p>
-          <p>
-            These systems bridge foundational machine learning theory with robust, deployable pipelines that deliver actionable insight to domain specialists and public stakeholders.
-          </p>
-        </div>
-
-        <!-- Figure 3 -->
-        <Figure
-          figureNumber={3}
-          caption="Multi-scale feature pyramid attention for microscopic crop pathology detection under varying natural foliage illumination."
-        >
-          <div class="h-40 flex items-center justify-center font-mono text-xs text-[var(--text-muted)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-            <div class="text-center space-y-1">
-              <div class="text-[var(--accent-signal)] font-semibold">FIG. 03 // PYRAMIDAL PATHOLOGY DETECTION PIPELINE</div>
-              <div class="text-[11px]">Hierarchical Leaf Segmentation → Microscopic Puncture Localization</div>
-            </div>
-          </div>
-        </Figure>
-
-        <div class="space-y-2 pt-2">
-          <div class="font-mono text-[10px] uppercase text-[var(--text-muted)] tracking-wider">
-            Core Methods & Tooling
-          </div>
-          <StackTags stack={['PyTorch', 'OpenCV', 'Spatio-Temporal GNNs', 'Precision Agriculture']} />
-        </div>
-
-        <div class="space-y-3 pt-6 border-t border-[var(--border-subtle)]/40">
-          <div class="font-mono text-xs uppercase text-[var(--accent-signal)] tracking-wider">
-            Related Publications
-          </div>
-          <div class="space-y-1">
-            {pillar3Pubs.slice(0, 2).map((pub) => (
-              <PubRow pub={pub} compact={true} />
-            ))}
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   </div>
 </BaseLayout>

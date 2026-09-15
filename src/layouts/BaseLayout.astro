@@ -3,10 +3,8 @@ import { ClientRouter } from 'astro:transitions';
 import { withBase } from '../lib/paths';
 import SEO from '../components/common/SEO.astro';
 import SkipLink from '../components/layout/SkipLink.astro';
-import Graticule from '../components/layout/Graticule.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import AxisRail from '../components/layout/AxisRail.astro';
 import CommandPalette from '../components/common/CommandPalette.astro';
 import '../styles/global.css';
 import '../styles/print.css';
@@ -29,7 +27,6 @@ interface Props {
   ogImage?: string;
   highwire?: HighwireTags;
   jsonLd?: Record<string, unknown>;
-  sections?: { id: string; label: string }[];
 }
 
 const {
@@ -40,7 +37,6 @@ const {
   ogImage,
   highwire,
   jsonLd,
-  sections = [],
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -52,20 +48,19 @@ const baseUrl = import.meta.env.BASE_URL;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0A1424" />
+    <meta name="theme-color" content="#120722" />
     <meta name="color-scheme" content="dark light" />
 
-    <!-- Blocking inline script in <head> for zero-flash theme switching per §5 -->
+    <!-- Blocking inline script in <head> for zero-flash theme switching (§6) -->
     <script is:inline>
       (function () {
         try {
           const stored = localStorage.getItem('theme');
-          // Dark is default theme per §4.3
           const theme = stored === 'light' ? 'light' : 'dark';
           document.documentElement.setAttribute('data-theme', theme);
           const metaTheme = document.querySelector('meta[name="theme-color"]');
           if (metaTheme) {
-            metaTheme.setAttribute('content', theme === 'dark' ? '#0A1424' : '#F5F7FB');
+            metaTheme.setAttribute('content', theme === 'dark' ? '#120722' : '#FBF8FF');
           }
           const metaColor = document.querySelector('meta[name="color-scheme"]');
           if (metaColor) {
@@ -89,25 +84,29 @@ const baseUrl = import.meta.env.BASE_URL;
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="manifest" href={withBase('/site.webmanifest')} />
 
-    <!-- Privacy-respecting analytics placeholder per §12 (Zero cookies, commented out) -->
+    <!-- Privacy-respecting analytics placeholder per §13 (Zero cookies, commented out) -->
     <!--
     <script defer data-domain="prerna-kri.github.io" src="https://plausible.io/js/script.js"></script>
     -->
 
     <ClientRouter />
   </head>
-  <body class="relative selection:bg-[var(--accent-signal)] selection:text-[var(--bg-page)]">
+  <body class="relative bg-[var(--bg-page)] text-[var(--text-body)] flex flex-col min-h-screen selection:bg-[var(--interactive)] selection:text-[#120722]">
     <SkipLink />
-    <Graticule />
 
-    <Header isHome={isHome} currentPath={currentPath} />
+    <Header currentPath={currentPath} />
 
-    <main id="main" class="flex-1 w-full max-w-[1320px] mx-auto px-[clamp(1.25rem,5vw,5rem)] relative z-10">
+    <main id="main" class="flex-1 w-full relative z-10">
       <slot />
     </main>
 
-    <AxisRail sections={sections} />
     <Footer />
     <CommandPalette />
+
+    <script>
+      import { initMotion } from '../scripts/motion';
+      initMotion();
+      document.addEventListener('astro:page-load', () => initMotion());
+    </script>
   </body>
 </html>

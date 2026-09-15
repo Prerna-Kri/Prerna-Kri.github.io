@@ -1,0 +1,14 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+}
+
+const { id, class: className = '' } = Astro.props;
+---
+
+<div
+  id={id}
+  class={`section-rule w-full h-[2px] pointer-events-none ${className}`}
+  aria-hidden="true"
+></div>

@@ -1,0 +1,14 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`absolute inset-0 pointer-events-none overflow-hidden ${className}`} aria-hidden="true">
+  <canvas
+    id="plasma-hero-canvas"
+    class="w-full h-full block opacity-40 transition-opacity duration-700"
+  ></canvas>
+</div>

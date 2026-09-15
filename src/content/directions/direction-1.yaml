@@ -1,0 +1,10 @@
+title: "Agricultural Vision Diagnostics"
+slug: "agricultural-vision"
+order: 1
+blurb: "High-resolution feature extraction for fine-grained pest detection and leaf disease classification in agriculture."
+body: "Automating agricultural disease diagnosis requires robust visual feature extraction across micro-scale lesions under unstructured field lighting. By developing deep convolutional architectures and custom field datasets, this research focuses on fine-grained lesion identification, such as thrips damage on chili foliage. The objective is to yield lightweight, accurate detection pipelines that operate reliably on local edge devices."
+methods:
+  - "PyTorch"
+  - "OpenCV"
+  - "CNN Architectures"
+  - "Custom Datasets"
