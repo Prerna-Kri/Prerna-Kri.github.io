@@ -1,0 +1,26 @@
+# TODO(content): replace placeholder publication data with final publication records
+title: "Equivariant Neural Operators for Continuous Spatial Reasoning in Vision"
+authors:
+  - "Kumari, P."
+  - "Iyer, S."
+year: 2026
+venue: "arXiv preprint"
+venueShort: "arXiv"
+type: "preprint"
+status: "preprint"
+topics:
+  - "computer-vision"
+  - "mathematical-foundations"
+abstract: "Standard visual backbones discretize spatial coordinate frames into rigid grid patches. We formulate infinite-dimensional continuous neural operators exhibiting SE(2)-equivariance, enabling resolution-independent zero-shot segmentation across multiple scales."
+bibtex: |
+  @article{kumari2026equivariant,
+    title={Equivariant Neural Operators for Continuous Spatial Reasoning in Vision},
+    author={Kumari, Prerna and Iyer, Sundar},
+    journal={arXiv preprint arXiv:2601.09210},
+    year={2026}
+  }
+arxiv: "2601.09210"
+pdf: "https://arxiv.org/pdf/2601.09210"
+code: "https://github.com/Prerna-Kri"
+featured: false
+date: 2026-01-15

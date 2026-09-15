@@ -1,0 +1,26 @@
+# TODO(content): replace placeholder publication data with final publication records
+title: "Anchor-Free Boundary Refinement for Microscopic Foliage Anomaly Detection"
+authors:
+  - "Kumari, P."
+  - "Mishra, S."
+year: 2023
+venue: "British Machine Vision Conference (BMVC)"
+venueShort: "BMVC"
+type: "conference"
+status: "published"
+topics:
+  - "computer-vision"
+abstract: "Dense foliage images exhibit heavy occlusion and irregular lesion contours. We present a contour-aware keypoint regression model that eliminates traditional box priors and directly optimizes polygon curvature."
+bibtex: |
+  @inproceedings{kumari2023anchorfree,
+    title={Anchor-Free Boundary Refinement for Microscopic Foliage Anomaly Detection},
+    author={Kumari, Prerna and Mishra, Saurabh},
+    booktitle={British Machine Vision Conference (BMVC)},
+    year={2023}
+  }
+doi: "10.5244/C.37.108"
+pdf: "https://bmvc2023.org/papers/108.pdf"
+code: "https://github.com/Prerna-Kri"
+citations: 8
+featured: false
+date: 2023-11-20

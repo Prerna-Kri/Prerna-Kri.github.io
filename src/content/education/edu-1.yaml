@@ -1,0 +1,8 @@
+# TODO(content): replace placeholder education details if needed
+degree: "Doctor of Philosophy (Ph.D.)"
+field: "Data Science and Engineering"
+institution: "Indian Institute of Science Education and Research (IISER) Bhopal"
+start: "2026"
+end: "Present"
+advisor: "Department of Data Science and Engineering Faculty"
+thesis: "Self-Supervised Geometric & Topological Deep Learning for Computer Vision"

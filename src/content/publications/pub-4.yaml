@@ -1,0 +1,27 @@
+# TODO(content): replace placeholder publication data with final publication records
+title: "Spatio-Temporal Graph Neural Networks for Accident Severity Forecasting"
+authors:
+  - "Kumari, P."
+  - "Rao, K."
+year: 2023
+venue: "ACM SIGKDD Workshop on Urban Computing (UrbComp)"
+venueShort: "KDD UrbComp"
+type: "workshop"
+status: "published"
+topics:
+  - "predictive-analytics"
+  - "deep-learning"
+abstract: "Road intersection topologies and dynamic meteorological indicators induce non-stationary risk profiles. We present a dynamic graph convolution architecture capturing both macroscopic transport networks and microscopic intersection kinematics."
+bibtex: |
+  @inproceedings{kumari2023spatiotemporal,
+    title={Spatio-Temporal Graph Neural Networks for Accident Severity Forecasting},
+    author={Kumari, Prerna and Rao, Kiran},
+    booktitle={ACM SIGKDD Workshop on Urban Computing (UrbComp)},
+    year={2023}
+  }
+doi: "10.1145/3604915.3608821"
+pdf: "https://arxiv.org/pdf/2308.05120"
+code: "https://github.com/Prerna-Kri"
+citations: 16
+featured: true
+date: 2023-08-07

@@ -1,0 +1,10 @@
+# TODO(content): replace placeholder experience details if needed
+role: "PhD Research Scholar"
+org: "Indian Institute of Science Education and Research (IISER) Bhopal"
+location: "Bhopal, Madhya Pradesh, India"
+start: "2026"
+end: "Present"
+bullets:
+  - "Investigating foundational architectures for visual representation learning and self-supervised geometry."
+  - "Formulating equivariant deep learning algorithms applied to multi-scale natural and agricultural images."
+  - "Supervising laboratory sessions in machine learning and data engineering."

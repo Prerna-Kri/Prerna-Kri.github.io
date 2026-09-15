@@ -1,0 +1,14 @@
+# TODO(content): replace placeholder project details with updated repository links
+name: "Real-Time Object Tracking Pipeline"
+summary: "High-throughput multi-class visual object detection and bounding box trajectory tracking."
+description: "Implementation of accelerated YOLO-based detection pipelines with Kalman filtering and DeepSORT for robust identity preservation across severe occlusions and rapid camera ego-motion."
+stack:
+  - "PyTorch"
+  - "YOLO"
+  - "DeepSORT"
+  - "CUDA"
+role: "Researcher & Engineer"
+status: "active"
+year: 2023
+repo: "https://github.com/Prerna-Kri"
+featured: false

@@ -1,0 +1,14 @@
+# TODO(content): replace placeholder project details with updated repository links
+name: "Topological Embedding Workbench"
+summary: "Interactive diagnostic suite for inspecting latent representation manifolds and spectral decay."
+description: "A computational toolkit for visualizing high-dimensional neural representations. Computes persistent homology diagrams, singular value spectra of attention weights, and cluster separation metrics across training checkpoints."
+stack:
+  - "TypeScript"
+  - "Canvas 2D"
+  - "Python"
+  - "NumPy"
+role: "Creator"
+status: "archived"
+year: 2023
+repo: "https://github.com/Prerna-Kri"
+featured: false

@@ -1,0 +1,26 @@
+# TODO(content): replace placeholder publication data with final publication records
+title: "Empirical Analysis of Convergence Bounds in Multi-Task Vision Networks"
+authors:
+  - "Kumari, P."
+  - "Choudhury, A."
+year: 2022
+venue: "Indian Conference on Computer Vision, Graphics and Image Processing (ICVGIP)"
+venueShort: "ICVGIP"
+type: "workshop"
+status: "published"
+topics:
+  - "mathematical-foundations"
+  - "deep-learning"
+abstract: "Gradient interference across orthogonal objective tasks destabilises joint parameter optimization. We benchmark gradient surgery projections against adaptive Pareto frontier formulations on visual benchmarks."
+bibtex: |
+  @inproceedings{kumari2022empirical,
+    title={Empirical Analysis of Convergence Bounds in Multi-Task Vision Networks},
+    author={Kumari, Prerna and Choudhury, Alok},
+    booktitle={Proceedings of the 13th Indian Conference on Computer Vision, Graphics and Image Processing (ICVGIP)},
+    year={2022}
+  }
+doi: "10.1145/3571600.3571622"
+pdf: "https://dl.acm.org/doi/10.1145/3571600.3571622"
+citations: 4
+featured: false
+date: 2022-12-10

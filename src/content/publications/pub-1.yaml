@@ -1,0 +1,31 @@
+# TODO(content): replace placeholder publication data with final publication records
+title: "Self-Supervised Feature Invariance for Robust Visual Object Segmentation"
+authors:
+  - "Kumari, P."
+  - "Sharma, A."
+  - "Verma, R."
+year: 2025
+venue: "IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)"
+venueShort: "CVPR"
+type: "conference"
+status: "published"
+topics:
+  - "computer-vision"
+  - "deep-learning"
+abstract: "We introduce a self-supervised visual representation framework that preserves semantic topology across extreme geometric and illumination perturbations. By formulating contrastive pairs through topological persistent homology, the model achieves state-of-the-art segmentation fidelity without requiring dense pixel-level supervision."
+bibtex: |
+  @inproceedings{kumari2025self,
+    title={Self-Supervised Feature Invariance for Robust Visual Object Segmentation},
+    author={Kumari, Prerna and Sharma, Amit and Verma, Rohit},
+    booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year={2025}
+  }
+doi: "10.1109/CVPR52688.2025.00142"
+arxiv: "2503.04182"
+pdf: "https://arxiv.org/pdf/2503.04182"
+code: "https://github.com/Prerna-Kri"
+data: "https://github.com/Prerna-Kri"
+award: "Spotlight"
+citations: 14
+featured: true
+date: 2025-06-18
