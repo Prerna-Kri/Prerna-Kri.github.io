@@ -1,0 +1,19 @@
+---
+interface Props {
+  variant?: 'mono' | 'subtle' | 'accent' | 'amber';
+  class?: string;
+}
+
+const { variant = 'mono', class: className = '' } = Astro.props;
+
+const styles = {
+  mono: 'font-mono text-xs px-2 py-0.5 rounded-[4px] bg-[var(--bg-well)] border border-[var(--border-subtle)] text-[var(--text-muted)]',
+  subtle: 'text-xs px-2.5 py-0.5 rounded-[4px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-body)]',
+  accent: 'font-mono text-xs px-2 py-0.5 rounded-[4px] bg-[var(--accent-signal)]/10 border border-[var(--accent-signal)]/30 text-[var(--accent-signal)]',
+  amber: 'font-mono text-xs px-2 py-0.5 rounded-[4px] bg-[var(--accent-amber)]/10 border border-[var(--accent-amber)]/30 text-[var(--accent-amber)] font-medium',
+};
+---
+
+<span class={`inline-block ${styles[variant]} ${className}`}>
+  <slot />
+</span>

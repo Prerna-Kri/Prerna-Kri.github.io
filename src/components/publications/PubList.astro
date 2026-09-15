@@ -1,0 +1,82 @@
+---
+import PubRow from './PubRow.astro';
+
+interface PublicationItem {
+  id: string;
+  data: {
+    title: string;
+    authors: string[];
+    year: number;
+    venue: string;
+    venueShort?: string;
+    type: string;
+    status: string;
+    topics: string[];
+    abstract: string;
+    bibtex: string;
+    doi?: string;
+    arxiv?: string;
+    pdf?: string;
+    code?: string;
+    data?: string;
+    poster?: string;
+    slides?: string;
+    video?: string;
+    award?: string;
+    citations?: number;
+    featured: boolean;
+    date: Date | string;
+  };
+}
+
+interface Props {
+  publications: PublicationItem[];
+  groupByYear?: boolean;
+}
+
+const { publications, groupByYear = true } = Astro.props;
+
+// Group publications by year descending
+const years = Array.from(new Set(publications.map((p) => p.data.year))).sort((a, b) => b - a);
+
+const grouped = years.map((year) => ({
+  year,
+  items: publications.filter((p) => p.data.year === year),
+}));
+---
+
+<div id="pub-list-container" class="space-y-12">
+  {
+    groupByYear ? (
+      grouped.map(({ year, items }) => (
+        <section class="pub-year-group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 pt-4" data-year={year} id={`year-${year}`}>
+          <!-- Sticky Year Marker in Left Gutter per §7.3 -->
+          <div class="md:col-span-2">
+            <div class="md:sticky md:top-24 font-mono text-[var(--step-3)] font-semibold text-[var(--text-muted)] opacity-70">
+              {year}
+            </div>
+          </div>
+
+          <!-- Publications list for this year -->
+          <div class="md:col-span-10 space-y-1">
+            {items.map((pub) => (
+              <PubRow pub={pub} />
+            ))}
+          </div>
+        </section>
+      ))
+    ) : (
+      <div class="space-y-2">
+        {publications.map((pub) => (
+          <PubRow pub={pub} showYearGutter={true} />
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<script>
+  import { initPubExpand } from '../../scripts/pubExpand';
+  initPubExpand();
+  document.addEventListener('astro:page-load', initPubExpand);
+</script>

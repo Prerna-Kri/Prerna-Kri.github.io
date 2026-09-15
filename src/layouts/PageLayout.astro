@@ -1,0 +1,34 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  lead?: string;
+  sections?: { id: string; label: string }[];
+}
+
+const { title, description, lead, sections = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} sections={sections}>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-x-6 py-12 md:py-16">
+    <!-- Main content container in columns 2-9 on desktop per §4.5 -->
+    <div class="md:col-start-2 md:col-span-8 space-y-12">
+      <header class="space-y-4 border-b border-[var(--border-subtle)] pb-8">
+        <h1 class="font-display text-[var(--step-5)] text-[var(--text-heading)] tracking-tight">
+          {title}
+        </h1>
+        {lead && (
+          <p class="text-[var(--step-1)] text-[var(--text-body)] leading-relaxed max-w-[68ch]">
+            {lead}
+          </p>
+        )}
+      </header>
+
+      <div class="space-y-16">
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

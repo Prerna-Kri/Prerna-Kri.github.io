@@ -1,0 +1,19 @@
+---
+interface Props {
+  caption: string;
+  figureNumber?: number;
+  class?: string;
+}
+
+const { caption, figureNumber, class: className = '' } = Astro.props;
+---
+
+<figure class={`space-y-2.5 my-6 ${className}`}>
+  <div class="border border-[var(--border-subtle)] bg-[var(--bg-well)] rounded-[0px] p-4 sm:p-6 overflow-hidden">
+    <slot />
+  </div>
+  <figcaption class="text-[var(--step--1)] text-[var(--text-muted)] font-mono leading-normal">
+    {figureNumber && <strong class="text-[var(--text-body)] font-semibold">Figure {figureNumber}. </strong>}
+    {caption}
+  </figcaption>
+</figure>

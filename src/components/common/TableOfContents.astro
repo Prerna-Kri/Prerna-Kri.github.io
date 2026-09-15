@@ -1,0 +1,61 @@
+---
+interface Props {
+  headings: { id: string; label: string }[];
+  class?: string;
+}
+
+const { headings, class: className = '' } = Astro.props;
+---
+
+<nav aria-label="Table of contents" class={`sticky top-28 space-y-3 font-mono text-xs ${className}`}>
+  <div class="text-[10px] tracking-wider uppercase text-[var(--text-muted)] font-semibold border-b border-[var(--border-subtle)] pb-2">
+    Contents
+  </div>
+  <ul class="space-y-2">
+    {
+      headings.map((h) => (
+        <li>
+          <a
+            href={`#${h.id}`}
+            class="toc-link block text-[var(--text-muted)] hover:text-[var(--accent-signal)] transition-colors border-l-2 border-transparent pl-2.5 py-0.5"
+            data-toc-id={h.id}
+          >
+            {h.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  function setupTocHighlight() {
+    const links = document.querySelectorAll<HTMLElement>('.toc-link');
+    const sections = document.querySelectorAll<HTMLElement>('section[id]');
+    if (!links.length || !sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            links.forEach((l) => {
+              const active = l.getAttribute('data-toc-id') === id;
+              l.classList.toggle('border-[var(--accent-signal)]', active);
+              l.classList.toggle('text-[var(--accent-signal)]', active);
+              l.classList.toggle('font-medium', active);
+              l.classList.toggle('border-transparent', !active);
+              l.classList.toggle('text-[var(--text-muted)]', !active);
+            });
+          }
+        });
+      },
+      { rootMargin: '-20% 0px -60% 0px' },
+    );
+
+    sections.forEach((sec) => observer.observe(sec));
+  }
+
+  setupTocHighlight();
+  document.addEventListener('astro:page-load', setupTocHighlight);
+</script>

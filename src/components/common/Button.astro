@@ -1,0 +1,40 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  class?: string;
+  target?: string;
+  rel?: string;
+  isMagnetic?: boolean;
+}
+
+const {
+  href,
+  variant = 'secondary',
+  class: className = '',
+  target,
+  rel,
+  isMagnetic = false,
+} = Astro.props;
+
+const variantStyles = {
+  primary:
+    'bg-[var(--bg-surface)] text-[var(--text-heading)] border border-[var(--border-strong)] hover:bg-[var(--accent-signal)] hover:text-[var(--bg-page)] hover:border-[var(--accent-signal)]',
+  secondary:
+    'bg-transparent text-[var(--text-body)] border border-[var(--border-subtle)] hover:border-[var(--border-strong)] hover:text-[var(--text-heading)]',
+  ghost:
+    'bg-transparent text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:bg-[var(--bg-surface)]',
+};
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  target={target}
+  rel={rel}
+  data-magnetic={isMagnetic ? 'true' : undefined}
+  class={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[10px] text-[var(--step-0)] font-medium transition-all duration-200 cursor-pointer ${variantStyles[variant]} ${className}`}
+>
+  <slot />
+</Tag>

@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  text?: string;
+  targetSelector?: string;
+  label?: string;
+  class?: string;
+}
+
+const { text, targetSelector, label = 'Copy', class: className = '' } = Astro.props;
+---
+
+<button
+  type="button"
+  data-copy-button
+  data-copy-text={text}
+  data-copy-target={targetSelector}
+  class={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:border-[var(--border-strong)] transition-all font-mono text-xs cursor-pointer ${className}`}
+  aria-label={`${label} to clipboard`}
+>
+  <span class="copy-icon-default inline-block">
+    <Icon name="copy" size={13} />
+  </span>
+  <span class="copy-icon-success hidden inline-block text-[var(--accent-signal)]">
+    <Icon name="check" size={13} />
+  </span>
+  <span class="copy-label">{label}</span>
+</button>
+
+<script>
+  import { initCopyButtons } from '../../scripts/copy';
+  initCopyButtons();
+  document.addEventListener('astro:page-load', initCopyButtons);
+</script>

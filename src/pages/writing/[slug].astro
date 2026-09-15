@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { calculateReadingTime } from '../../lib/readingTime';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+
+  const sorted = [...posts].sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+  );
+
+  return sorted.map((post, index) => {
+    const slug = post.id.replace(/\.[^/.]+$/, '');
+    const prevPost =
+      index < sorted.length - 1
+        ? {
+            title: sorted[index + 1]!.data.title,
+            slug: sorted[index + 1]!.id.replace(/\.[^/.]+$/, ''),
+          }
+        : undefined;
+    const nextPost =
+      index > 0
+        ? {
+            title: sorted[index - 1]!.data.title,
+            slug: sorted[index - 1]!.id.replace(/\.[^/.]+$/, ''),
+          }
+        : undefined;
+
+    return {
+      params: { slug },
+      props: { post, prevPost, nextPost },
+    };
+  });
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content, headings } = await render(post);
+const readingTime = calculateReadingTime(post.body || '');
+---
+
+<PostLayout
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  updated={post.data.updated}
+  tags={post.data.tags}
+  readingTime={readingTime}
+  headings={headings}
+  prevPost={prevPost}
+  nextPost={nextPost}
+>
+  <Content />
+</PostLayout>

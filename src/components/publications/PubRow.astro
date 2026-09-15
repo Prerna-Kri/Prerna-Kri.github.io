@@ -1,0 +1,150 @@
+---
+import LinkChip from './LinkChip.astro';
+import BibtexBlock from './BibtexBlock.astro';
+import Tag from '../common/Tag.astro';
+import Icon from '../common/Icon.astro';
+import { withBase } from '../../lib/paths';
+
+interface Props {
+  pub: {
+    id: string;
+    data: {
+      title: string;
+      authors: string[];
+      year: number;
+      venue: string;
+      venueShort?: string;
+      type: string;
+      status: string;
+      topics: string[];
+      abstract: string;
+      bibtex: string;
+      doi?: string;
+      arxiv?: string;
+      pdf?: string;
+      code?: string;
+      data?: string;
+      poster?: string;
+      slides?: string;
+      video?: string;
+      award?: string;
+      citations?: number;
+      featured: boolean;
+      date: Date | string;
+    };
+  };
+  showYearGutter?: boolean;
+  compact?: boolean;
+}
+
+const { pub, showYearGutter = false, compact = false } = Astro.props;
+const d = pub.data;
+const pubId = pub.id.replace(/\.[^/.]+$/, '');
+const permalink = withBase(`/publications/${pubId}`);
+---
+
+<article
+  class="pub-row group relative border-b border-[var(--border-subtle)] py-4 transition-colors duration-160 ease-[var(--ease-out-quint)] hover:bg-[var(--bg-surface)] px-3 -mx-3 rounded-[4px]"
+  data-pub-type={d.type}
+  data-pub-topics={d.topics.join(',')}
+  data-pub-year={d.year}
+>
+  <!-- Left accent hairline indicator on hover per §6.2 -->
+  <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--accent-signal)] scale-y-0 origin-top transition-transform duration-160 ease-[var(--ease-out-quint)] group-hover:scale-y-100"></div>
+
+  <div class="space-y-1.5">
+    <!-- Meta row: Year, Venue, Award Badge, Citations -->
+    <div class="flex flex-wrap items-center gap-2 text-[var(--step--1)] font-mono text-[var(--text-muted)]">
+      {showYearGutter && (
+        <span class="font-semibold text-[var(--text-heading)] group-hover:text-[var(--accent-signal)] transition-colors">
+          {d.year}
+        </span>
+      )}
+      <span class="text-[var(--text-body)]">{d.venueShort || d.venue}</span>
+      {d.award && (
+        <Tag variant="amber">
+          ★ {d.award}
+        </Tag>
+      )}
+      {d.status === 'preprint' && (
+        <Tag variant="mono">
+          Preprint
+        </Tag>
+      )}
+      {d.citations !== undefined && (
+        <span class="text-[11px] text-[var(--text-muted)] font-mono">
+          ({d.citations} citations)
+        </span>
+      )}
+    </div>
+
+    <!-- Title (Instrument Serif at --step-1) -->
+    <h3 class="font-display text-[var(--step-1)] text-[var(--text-heading)] leading-snug">
+      <a href={permalink} class="hover:text-[var(--accent-signal)] transition-colors">
+        {d.title}
+      </a>
+    </h3>
+
+    <!-- Authors with Kumari, P. highlighted in mist-50 weight 600 per §7.3 -->
+    <p class="text-[var(--step--1)] leading-relaxed">
+      {
+        d.authors.map((author, index) => {
+          const isMe = author.toLowerCase().includes('kumari') || author.toLowerCase().includes('prerna');
+          return (
+            <span>
+              <span class={isMe ? 'text-[var(--text-heading)] font-semibold underline decoration-[var(--accent-signal)]/40' : 'text-[var(--text-muted)]'}>
+                {author}
+              </span>
+              {index < d.authors.length - 1 && <span class="text-[var(--text-muted)]">, </span>}
+            </span>
+          );
+        })
+      }
+    </p>
+
+    <!-- Chips and Expand Toggle -->
+    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+      <!-- Direct Links Chips -->
+      <div class="flex flex-wrap items-center gap-1.5">
+        {d.pdf && <LinkChip href={d.pdf} label="PDF" icon="file-text" />}
+        {d.doi && <LinkChip href={`https://doi.org/${d.doi}`} label="DOI" />}
+        {d.arxiv && <LinkChip href={`https://arxiv.org/abs/${d.arxiv}`} label={`arXiv:${d.arxiv}`} />}
+        {d.code && <LinkChip href={d.code} label="Code" icon="code" />}
+      </div>
+
+      <!-- Row expansion button per §6.2 (omitted in compact mode) -->
+      {!compact && (
+        <button
+          type="button"
+          class="pub-expand-btn inline-flex items-center gap-1 font-mono text-[11px] text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors cursor-pointer py-0.5"
+          aria-expanded="false"
+          aria-controls={`pub-expand-${pubId}`}
+        >
+          <span class="expand-text">Abstract & BibTeX</span>
+          <Icon name="chevron-down" size={12} class="transition-transform duration-200" />
+        </button>
+      )}
+    </div>
+
+    <!-- Expansion Container animating grid-template-rows: 0fr -> 1fr per §6.2 -->
+    {!compact && (
+      <div
+        id={`pub-expand-${pubId}`}
+        class="pub-expand-content grid pub-expand-grid"
+        hidden
+      >
+        <div class="overflow-hidden space-y-3 pt-3 border-t border-[var(--border-subtle)]/50">
+          <div class="space-y-1">
+            <div class="font-mono text-[10px] uppercase text-[var(--text-muted)]">
+              Abstract
+            </div>
+            <p class="text-[var(--step--1)] text-[var(--text-body)] leading-relaxed">
+              {d.abstract}
+            </p>
+          </div>
+          <BibtexBlock bibtex={d.bibtex} id={`bibtex-code-${pubId}`} />
+        </div>
+      </div>
+    )}
+  </div>
+</article>

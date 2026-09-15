@@ -1,0 +1,192 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/common/Button.astro';
+import Icon from '../components/common/Icon.astro';
+import { site } from '../config/site';
+import { withBase } from '../lib/paths';
+import { sortPublicationsByYear } from '../lib/sort';
+
+const education = await getCollection('education');
+const experience = await getCollection('experience');
+const awards = await getCollection('awards');
+const publications = await getCollection('publications');
+
+const sortedPubs = sortPublicationsByYear(publications, 'newest');
+const sortedAwards = [...awards].sort((a, b) => b.data.year - a.data.year);
+
+const sections = [
+  { id: 'education', label: '01. EDUCATION' },
+  { id: 'experience', label: '02. EXPERIENCE' },
+  { id: 'publications', label: '03. PAPERS' },
+  { id: 'awards', label: '04. HONORS' },
+  { id: 'skills', label: '05. SKILLS' },
+];
+---
+
+<BaseLayout
+  title="Curriculum Vitae"
+  description="Curriculum Vitae for Prerna Kumari — PhD Researcher in Data Science & Engineering at IISER Bhopal."
+  sections={sections}
+>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-x-6 py-12 md:py-16">
+    <div class="md:col-start-2 md:col-span-8 space-y-12">
+
+      <!-- Header & Download PDF Button per §7.6 -->
+      <header class="space-y-4 border-b border-[var(--border-subtle)] pb-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h1 class="font-display text-[var(--step-5)] text-[var(--text-heading)] tracking-tight">
+              Curriculum Vitae
+            </h1>
+            <p class="text-[var(--step-0)] text-[var(--text-muted)] mt-1">
+              Prerna Kumari · {site.institution} · {site.department}
+            </p>
+          </div>
+
+          <!-- Prominent PDF Download Button -->
+          <div class="no-print shrink-0">
+            <Button href={withBase('/cv.pdf')} variant="primary" target="_blank" rel="noopener noreferrer">
+              <Icon name="file-text" size={16} />
+              <span>Download PDF</span>
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <!-- 1. Education Section -->
+      <section id="education" class="cv-entry space-y-6">
+        <div class="font-mono text-xs uppercase tracking-widest text-[var(--accent-signal)] border-b border-[var(--border-subtle)] pb-2 font-semibold">
+          // 01. Education
+        </div>
+
+        <div class="space-y-6 divide-y divide-[var(--border-subtle)]/40">
+          {education.map((item) => {
+            const d = item.data;
+            return (
+              <div class="pt-4 first:pt-0 space-y-1">
+                <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                  <h3 class="font-sans font-semibold text-[var(--step-0)] text-[var(--text-heading)]">
+                    {d.degree} in {d.field}
+                  </h3>
+                  <span class="font-mono text-xs text-[var(--text-muted)]">
+                    {d.start} – {d.end || 'Present'}
+                  </span>
+                </div>
+                <div class="text-[var(--step--1)] text-[var(--text-muted)]">
+                  {d.institution}
+                </div>
+                {d.advisor && (
+                  <p class="text-xs text-[var(--text-body)] pt-1">
+                    Advisor: {d.advisor}
+                  </p>
+                )}
+                {d.thesis && (
+                  <p class="text-xs text-[var(--text-body)] italic">
+                    Thesis: {d.thesis}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <!-- 2. Research & Academic Experience -->
+      <section id="experience" class="cv-entry space-y-6">
+        <div class="font-mono text-xs uppercase tracking-widest text-[var(--accent-signal)] border-b border-[var(--border-subtle)] pb-2 font-semibold">
+          // 02. Academic & Research Experience
+        </div>
+
+        <div class="space-y-6 divide-y divide-[var(--border-subtle)]/40">
+          {experience.map((item) => {
+            const d = item.data;
+            return (
+              <div class="pt-4 first:pt-0 space-y-2">
+                <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                  <h3 class="font-sans font-semibold text-[var(--step-0)] text-[var(--text-heading)]">
+                    {d.role}
+                  </h3>
+                  <span class="font-mono text-xs text-[var(--text-muted)]">
+                    {d.start} – {d.end || 'Present'}
+                  </span>
+                </div>
+                <div class="text-[var(--step--1)] text-[var(--text-muted)]">
+                  {d.org} · {d.location}
+                </div>
+                <ul class="list-disc list-outside pl-4 space-y-1 text-xs text-[var(--text-body)] leading-relaxed">
+                  {d.bullets.map((bullet) => (
+                    <li>{bullet}</li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <!-- 3. Publications -->
+      <section id="publications" class="cv-entry space-y-6">
+        <div class="font-mono text-xs uppercase tracking-widest text-[var(--accent-signal)] border-b border-[var(--border-subtle)] pb-2 font-semibold">
+          // 03. Selected Publications
+        </div>
+
+        <ol class="space-y-4 list-decimal list-outside pl-5 text-xs text-[var(--text-body)] leading-relaxed">
+          {sortedPubs.map((pub) => {
+            const d = pub.data;
+            return (
+              <li class="pl-1">
+                <span class="font-medium text-[var(--text-heading)]">{d.title}</span>.
+                {' '}{d.authors.join(', ')}.
+                {' '}<span class="italic">{d.venue}</span> ({d.year}).
+                {d.doi && <span> doi:{d.doi}</span>}
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+
+      <!-- 4. Honors & Awards -->
+      <section id="awards" class="cv-entry space-y-6">
+        <div class="font-mono text-xs uppercase tracking-widest text-[var(--accent-signal)] border-b border-[var(--border-subtle)] pb-2 font-semibold">
+          // 04. Honors, Awards & Fellowships
+        </div>
+
+        <div class="space-y-3 divide-y divide-[var(--border-subtle)]/40">
+          {sortedAwards.map((award) => {
+            const d = award.data;
+            return (
+              <div class="pt-3 first:pt-0 flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 text-xs">
+                <div>
+                  <span class="font-semibold text-[var(--text-heading)]">{d.title}</span>
+                  <span class="text-[var(--text-muted)]"> — {d.issuer}</span>
+                  {d.description && <p class="text-[var(--text-muted)] text-[11px] mt-0.5">{d.description}</p>}
+                </div>
+                <span class="font-mono text-xs text-[var(--accent-signal)] shrink-0">{d.year}</span>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <!-- 5. Technical Skills & Tools -->
+      <section id="skills" class="cv-entry space-y-4">
+        <div class="font-mono text-xs uppercase tracking-widest text-[var(--accent-signal)] border-b border-[var(--border-subtle)] pb-2 font-semibold">
+          // 05. Technical Competencies
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-3 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-well)] space-y-1">
+            <span class="text-[var(--text-heading)] font-semibold">Languages & Frameworks</span>
+            <p class="text-[var(--text-muted)]">Python, PyTorch, C++, OpenCV, NumPy, Scikit-Learn, Pandas</p>
+          </div>
+          <div class="p-3 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-well)] space-y-1">
+            <span class="text-[var(--text-heading)] font-semibold">Domains & Mathematical Methods</span>
+            <p class="text-[var(--text-muted)]">Computer Vision, Persistent Homology, Differential Geometry, Equivariance</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>

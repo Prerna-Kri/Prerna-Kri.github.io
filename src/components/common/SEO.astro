@@ -1,0 +1,111 @@
+---
+import { site } from '../../config/site';
+import { getActiveSocials } from '../../lib/config';
+
+interface HighwireTags {
+  title?: string;
+  authors?: string[];
+  publicationDate?: string;
+  journalTitle?: string;
+  conferenceTitle?: string;
+  doi?: string;
+  pdfUrl?: string;
+}
+
+interface Props {
+  title?: string;
+  description?: string;
+  isHome?: boolean;
+  type?: 'website' | 'article' | 'profile';
+  ogImage?: string;
+  highwire?: HighwireTags;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = site.bio,
+  isHome = false,
+  type = 'website',
+  ogImage,
+  highwire,
+  jsonLd,
+} = Astro.props;
+
+const pageTitle = isHome
+  ? `${site.name} — Data Science Researcher`
+  : `${title} — ${site.name}`;
+
+const canonicalURL = new URL(Astro.url.pathname, site.domain);
+const activeSocials = getActiveSocials();
+
+// Default Person JSON-LD for Home
+const defaultPersonJsonLd = isHome
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: site.name,
+      jobTitle: site.role,
+      worksFor: {
+        '@type': 'EducationalOrganization',
+        name: site.institution,
+      },
+      url: site.domain,
+      email: site.email,
+      sameAs: activeSocials.map((s) => s.url),
+      knowsAbout: site.researchAreas,
+    }
+  : null;
+
+const schemaData = jsonLd || defaultPersonJsonLd;
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+{ogImage && <meta property="og:image" content={new URL(ogImage, site.domain)} />}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={new URL(ogImage, site.domain)} />}
+
+<!-- Robots -->
+<meta name="robots" content="index, follow" />
+
+<!-- Highwire Press Meta Tags for Google Scholar Indexing per §12 -->
+{
+  highwire && (
+    <>
+      {highwire.title && <meta name="citation_title" content={highwire.title} />}
+      {highwire.authors?.map((author) => (
+        <meta name="citation_author" content={author} />
+      ))}
+      {highwire.publicationDate && (
+        <meta name="citation_publication_date" content={highwire.publicationDate} />
+      )}
+      {highwire.journalTitle && (
+        <meta name="citation_journal_title" content={highwire.journalTitle} />
+      )}
+      {highwire.conferenceTitle && (
+        <meta name="citation_conference_title" content={highwire.conferenceTitle} />
+      )}
+      {highwire.doi && <meta name="citation_doi" content={highwire.doi} />}
+      {highwire.pdfUrl && <meta name="citation_pdf_url" content={highwire.pdfUrl} />}
+    </>
+  )
+}
+
+<!-- JSON-LD Structured Data per §12 -->
+{
+  schemaData && (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  )
+}

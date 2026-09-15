@@ -1,0 +1,47 @@
+---
+interface Props {
+  date: string;
+  title: string;
+  subtitle?: string;
+  link?: string;
+  badge?: string;
+  class?: string;
+}
+
+const { date, title, subtitle, link, badge, class: className = '' } = Astro.props;
+---
+
+<div class={`grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 py-3.5 border-b border-[var(--border-subtle)] text-[var(--step-0)] ${className}`}>
+  <!-- Date in left gutter (Cols 1-3 on sm+) -->
+  <div class="sm:col-span-3 font-mono text-[var(--step--1)] text-[var(--text-muted)] flex items-center gap-2">
+    <span>{date}</span>
+    {badge && (
+      <span class="font-mono text-[10px] uppercase px-1.5 py-0.2 rounded-[3px] bg-[var(--accent-signal)]/10 text-[var(--accent-signal)] border border-[var(--accent-signal)]/20">
+        {badge}
+      </span>
+    )}
+  </div>
+
+  <!-- Content on right (Cols 4-12) -->
+  <div class="sm:col-span-9 space-y-1">
+    <div class="text-[var(--text-body)]">
+      {link ? (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-[var(--accent-signal)] underline-offset-2 hover:underline transition-colors"
+        >
+          {title}
+        </a>
+      ) : (
+        <span>{title}</span>
+      )}
+    </div>
+    {subtitle && (
+      <div class="text-[var(--step--1)] text-[var(--text-muted)] leading-relaxed">
+        {subtitle}
+      </div>
+    )}
+  </div>
+</div>

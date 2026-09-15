@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/projects/ProjectCard.astro';
+import { sortProjects } from '../lib/sort';
+
+const allProjects = await getCollection('projects');
+const sortedProjects = sortProjects(allProjects);
+---
+
+<BaseLayout
+  title="Projects"
+  description="Open-source machine learning pipelines, computer vision frameworks, and diagnostic tools developed by Prerna Kumari."
+>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-x-6 py-12 md:py-16">
+    <div class="md:col-start-2 md:col-span-8 space-y-12">
+
+      <header class="space-y-4 border-b border-[var(--border-subtle)] pb-8">
+        <h1 class="font-display text-[var(--step-5)] text-[var(--text-heading)] tracking-tight">
+          Projects & Code
+        </h1>
+        <p class="text-[var(--step-1)] text-[var(--text-muted)] leading-relaxed max-w-[68ch]">
+          Computational implementations, applied vision models, and topological analysis tools built for reproducibility and deployment.
+        </p>
+      </header>
+
+      <!-- Two-column grid per §7.4 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {sortedProjects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
