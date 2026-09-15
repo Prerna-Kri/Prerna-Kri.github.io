@@ -1,0 +1,16 @@
+---
+/**
+ * Monogram mark for the header and hero per §7.
+ * Scientific notation aesthetic: boxed monogram initials PK.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`inline-flex items-center justify-center font-mono text-[var(--step--1)] font-semibold tracking-wider px-2 py-0.5 border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-heading)] rounded-[4px] select-none ${className}`}>
+  <span>PK</span>
+  <span class="w-1.5 h-1.5 ml-1 rounded-full bg-[var(--accent-signal)]"></span>
+</div>

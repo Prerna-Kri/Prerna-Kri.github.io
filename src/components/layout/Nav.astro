@@ -1,0 +1,48 @@
+---
+import { withBase } from '../../lib/paths';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+
+const navItems = [
+  { href: withBase('/research'), label: 'Research', raw: '/research' },
+  { href: withBase('/publications'), label: 'Publications', raw: '/publications' },
+  { href: withBase('/projects'), label: 'Projects', raw: '/projects' },
+  { href: withBase('/talks'), label: 'Talks', raw: '/talks' },
+  { href: withBase('/writing'), label: 'Writing', raw: '/writing' },
+  { href: withBase('/cv'), label: 'CV', raw: '/cv' },
+];
+
+function isActive(itemRaw: string): boolean {
+  if (currentPath === itemRaw || currentPath === `${itemRaw}/`) return true;
+  if (itemRaw !== '/' && currentPath.startsWith(itemRaw)) return true;
+  return false;
+}
+---
+
+<nav aria-label="Primary" class="hidden md:flex items-center gap-6 text-[var(--step--1)]">
+  {
+    navItems.map((item) => {
+      const active = isActive(item.raw);
+      return (
+        <a
+          href={item.href}
+          class={`transition-colors py-1 relative ${
+            active
+              ? 'text-[var(--text-heading)] font-medium'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-heading)]'
+          }`}
+          aria-current={active ? 'page' : undefined}
+        >
+          {item.label}
+          {active && (
+            <span class="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[var(--accent-signal)]" />
+          )}
+        </a>
+      );
+    })
+  }
+</nav>

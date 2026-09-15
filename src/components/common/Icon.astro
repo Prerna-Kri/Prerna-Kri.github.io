@@ -1,0 +1,41 @@
+---
+/**
+ * Inline SVG Icon renderer per §4.6.
+ * All icons are 20x20, 1.5px stroke, currentColor.
+ */
+interface Props {
+  name:
+    | 'search'
+    | 'sun'
+    | 'moon'
+    | 'copy'
+    | 'check'
+    | 'file-text'
+    | 'arrow-up-right'
+    | 'github'
+    | 'linkedin'
+    | 'academic'
+    | 'menu'
+    | 'close'
+    | 'chevron-down'
+    | 'code';
+  class?: string;
+  size?: number;
+}
+
+const { name, class: className = '', size = 20 } = Astro.props;
+
+// Dynamically import raw SVG files from src/icons/
+const icons = import.meta.glob<string>('../../icons/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const rawSvg = icons[`../../icons/${name}.svg`] ?? '';
+// Inject custom class or dimensions if passed
+const customizedSvg = rawSvg
+  .replace('<svg', `<svg class="inline-block shrink-0 ${className}" width="${size}" height="${size}"`);
+---
+
+<Fragment set:html={customizedSvg} />
