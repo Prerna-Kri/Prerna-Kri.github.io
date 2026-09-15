@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  class={`relative flex items-center justify-center w-9 h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:border-[var(--border-strong)] transition-colors cursor-pointer ${className}`}
+  aria-label="Toggle theme"
+  title="Toggle theme"
+>
+  <span class="dark-icon block [html[data-theme='light']_&]:hidden">
+    <Icon name="sun" size={18} />
+  </span>
+  <span class="light-icon hidden [html[data-theme='light']_&]:block">
+    <Icon name="moon" size={18} />
+  </span>
+</button>
+
+<script>
+  import { initThemeToggle } from '../../scripts/theme';
+  initThemeToggle();
+  document.addEventListener('astro:page-load', initThemeToggle);
+</script>

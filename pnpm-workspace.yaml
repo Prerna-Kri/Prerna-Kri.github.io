@@ -1,0 +1,4 @@
+allowBuilds:
+  chromedriver: true
+  esbuild: true
+  sharp: true

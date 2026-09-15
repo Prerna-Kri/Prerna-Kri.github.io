@@ -1,0 +1,89 @@
+/* Styling for long-form prose and MDX writing */
+.prose {
+  color: var(--text-body);
+  max-width: 68ch;
+  line-height: 1.75;
+  font-size: var(--step-0);
+}
+
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  color: var(--text-heading);
+  scroll-margin-top: 5rem;
+}
+
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  margin-top: 2.2em;
+  margin-bottom: 0.8em;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.3em;
+}
+
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+}
+
+.prose a {
+  color: var(--accent-signal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.prose a:hover {
+  opacity: 0.8;
+}
+
+.prose blockquote {
+  border-left: 3px solid rgba(71, 223, 198, 0.4);
+  padding-left: 1.25rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.prose pre {
+  background-color: var(--bg-well);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  margin: 1.5rem 0;
+}
+
+.prose code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--bg-well);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-signal);
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.prose li {
+  margin: 0.4rem 0;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5rem 0;
+}

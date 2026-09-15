@@ -1,0 +1,47 @@
+@media print {
+  :root {
+    --bg-page: #FFFFFF !important;
+    --bg-well: #F5F7FB !important;
+    --bg-surface: #FFFFFF !important;
+    --border-subtle: #D4DEEC !important;
+    --border-strong: #AEC2DE !important;
+    --text-muted: #5A6C88 !important;
+    --text-body: #1E2C44 !important;
+    --text-heading: #0A1424 !important;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #1E2C44 !important;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+
+  /* Hide canvas, header buttons, axis rail, command palette, back-to-top */
+  header,
+  footer,
+  #axis-rail,
+  #hero-canvas,
+  .no-print,
+  button,
+  .command-palette {
+    display: none !important;
+  }
+
+  /* Expand link URLs in print per §7.6 */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #5A6C88;
+    word-break: break-all;
+  }
+
+  /* Avoid page break inside entries */
+  .cv-entry,
+  .publication-entry,
+  article,
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

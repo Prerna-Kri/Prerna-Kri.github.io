@@ -1,0 +1,208 @@
+@import "tailwindcss";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/jetbrains-mono";
+@import "katex/dist/katex.min.css";
+
+@theme {
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Geist Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --dur-fast: 160ms;
+  --dur-base: 320ms;
+  --dur-slow: 620ms;
+  --dur-signature: 2400ms;
+}
+
+:root {
+  /* Dark theme is default */
+  --bg-page: #0A1424;
+  --bg-well: #0D1A2D;
+  --bg-surface: #11203A;
+  --border-subtle: #1B3055;
+  --border-strong: #2C4571;
+  --text-muted: #7D93B2;
+  --text-body: #C3D2E6;
+  --text-heading: #F1F6FD;
+  --accent-signal: #47DFC6;
+  --accent-pulse: #7C6BFF;
+  --accent-amber: #FFB547;
+  --focus-ring: #47DFC6;
+  --floating-shadow: 0 18px 50px -12px rgb(0 0 0 / 0.55);
+
+  /* Fluid type scale */
+  --step--1: clamp(0.833rem, 0.80rem + 0.15vw, 0.9rem);
+  --step-0:  clamp(1rem,     0.96rem + 0.20vw, 1.0625rem);
+  --step-1:  clamp(1.25rem,  1.18rem + 0.36vw, 1.42rem);
+  --step-2:  clamp(1.563rem, 1.44rem + 0.62vw, 1.9rem);
+  --step-3:  clamp(1.953rem, 1.75rem + 1.02vw, 2.53rem);
+  --step-4:  clamp(2.441rem, 2.11rem + 1.66vw, 3.38rem);
+  --step-5:  clamp(3.052rem, 2.53rem + 2.61vw, 4.5rem);
+  --step-6:  clamp(3.815rem, 3.02rem + 3.98vw, 6.0rem);
+
+  /* Spacing tokens */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 192px;
+
+  /* Layout */
+  --max-width-page: 1320px;
+  --side-padding: clamp(1.25rem, 5vw, 5rem);
+}
+
+[data-theme="light"] {
+  --bg-page: #F5F7FB;
+  --bg-well: #EDF1F7;
+  --bg-surface: #FFFFFF;
+  --border-subtle: #D4DEEC;
+  --border-strong: #AEC2DE;
+  --text-muted: #5A6C88;
+  --text-body: #1E2C44;
+  --text-heading: #0A1424;
+  --accent-signal: #0E9C86;
+  --accent-pulse: #5847D6;
+  --accent-amber: #B06E00;
+  --focus-ring: #0E9C86;
+  --floating-shadow: 0 18px 50px -18px rgb(16 32 56 / 0.18);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-page);
+  color: var(--text-body);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-heading);
+  text-transform: none; /* sentence case */
+  margin: 0;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.font-display {
+  font-family: var(--font-display);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Max measure for long reading */
+.measure-reading {
+  max-width: 68ch;
+}
+
+/* Accessible focus ring (§10) */
+:focus-visible {
+  outline: 2px solid var(--focus-ring) !important;
+  outline-offset: 3px !important;
+}
+
+/* Graticule pattern per §4.5 */
+.graticule-grid {
+  background-size: 96px 96px;
+  background-image: 
+    linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+  opacity: 0.22;
+  mask-image: radial-gradient(circle at 50% 35%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 35%, black 20%, transparent 80%);
+}
+
+/* Line reveal animation per §6.1 */
+.line-reveal {
+  transform: translateY(110%);
+  animation: revealLine 620ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards;
+}
+
+@keyframes revealLine {
+  0% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+/* Filter pills per §4.5 */
+.filter-pill {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+.filter-pill:hover {
+  color: var(--text-heading);
+  border-color: var(--border-strong);
+}
+.filter-pill.active-filter {
+  background-color: var(--accent-signal);
+  border-color: var(--accent-signal);
+  color: var(--bg-page);
+  font-weight: 600;
+}
+
+/* Pub row expansion and BibTeX box utilities */
+.pub-expand-grid {
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bibtex-box {
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-well);
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+/* Reduced Motion Safety Net (§6.3) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
