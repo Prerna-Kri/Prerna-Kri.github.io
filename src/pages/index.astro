@@ -1,0 +1,211 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/hero/Hero.astro';
+import SectionHeading from '../components/common/SectionHeading.astro';
+import PubRow from '../components/publications/PubRow.astro';
+import ProjectCard from '../components/projects/ProjectCard.astro';
+import DefinitionRow from '../components/common/DefinitionRow.astro';
+import CopyButton from '../components/common/CopyButton.astro';
+import Icon from '../components/common/Icon.astro';
+import { site } from '../config/site';
+import { withBase } from '../lib/paths';
+import { getActiveSocials } from '../lib/config';
+import { sortByDateDesc, sortPublicationsByYear } from '../lib/sort';
+import { formatDate } from '../lib/dates';
+
+// Fetch Collections
+const allPublications = await getCollection('publications');
+const allProjects = await getCollection('projects');
+const allNews = await getCollection('news');
+
+// Filter & Sort
+const featuredPublications = sortPublicationsByYear(
+  allPublications.filter((p) => p.data.featured),
+  'newest',
+).slice(0, 4);
+
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured)
+  .slice(0, 2);
+
+const recentNews = sortByDateDesc(allNews).slice(0, 5);
+const activeSocials = getActiveSocials();
+
+const sections = [
+  { id: 'hero', label: '01. INTRO' },
+  { id: 'focus', label: '02. PILLARS' },
+  { id: 'selected-work', label: '03. PAPERS' },
+  { id: 'building', label: '04. WORK' },
+  { id: 'recent', label: '05. NEWS' },
+  { id: 'contact', label: '06. CONTACT' },
+];
+---
+
+<BaseLayout isHome={true} sections={sections}>
+  <!-- 1. Hero Section per §7.1 -->
+  <Hero />
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-y-20 md:gap-x-6 py-12 md:py-20">
+    <div class="md:col-start-2 md:col-span-8 space-y-24">
+
+      <!-- 2. Focus: Three Research Pillars per §7.1 -->
+      <section id="focus" class="space-y-8 scroll-mt-24">
+        <SectionHeading
+          tag="FOCUS"
+          title="Research Pillars"
+          subtitle="Theoretical and empirical inquiries bridging mathematical topology and modern computer vision."
+        />
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+          <!-- Pillar 1 -->
+          <div class="border-t border-[var(--border-subtle)] pt-4 space-y-3">
+            <h3 class="font-display text-[var(--step-2)] text-[var(--text-heading)]">
+              <a href={withBase('/research#pillar-1')} class="hover:text-[var(--accent-signal)] transition-colors">
+                Geometric Invariance
+              </a>
+            </h3>
+            <p class="text-[var(--step--1)] text-[var(--text-body)] leading-relaxed">
+              Formulating equivariant neural architectures that guarantee spatial and topological consistency across transformations. Preserving continuous coordinate fields without reliance on rigid grid discretizations.
+            </p>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="border-t border-[var(--border-subtle)] pt-4 space-y-3">
+            <h3 class="font-display text-[var(--step-2)] text-[var(--text-heading)]">
+              <a href={withBase('/research#pillar-2')} class="hover:text-[var(--accent-signal)] transition-colors">
+                Visual Topology
+              </a>
+            </h3>
+            <p class="text-[var(--step--1)] text-[var(--text-body)] leading-relaxed">
+              Applying algebraic topology and persistent homology to analyze latent loss manifolds. Preventing feature collapse during self-supervised learning under extreme lighting and geometric perturbations.
+            </p>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="border-t border-[var(--border-subtle)] pt-4 space-y-3">
+            <h3 class="font-display text-[var(--step-2)] text-[var(--text-heading)]">
+              <a href={withBase('/research#pillar-3')} class="hover:text-[var(--accent-signal)] transition-colors">
+                Applied Modeling
+              </a>
+            </h3>
+            <p class="text-[var(--step--1)] text-[var(--text-body)] leading-relaxed">
+              Deploying robust predictive models to real-world visual diagnostics. Detecting microscopic agricultural pathology and modeling spatio-temporal transportation safety risks with mathematical guarantees.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Selected Work: 4 Featured Publications per §7.1 -->
+      <section id="selected-work" class="space-y-8 scroll-mt-24">
+        <div class="flex items-end justify-between border-t border-[var(--border-subtle)] pt-6">
+          <SectionHeading
+            tag="SELECTED WORK"
+            title="Key Publications"
+            class="border-t-0 pt-0"
+          />
+          <a
+            href={withBase('/publications')}
+            class="hidden sm:inline-flex items-center gap-1 font-mono text-xs text-[var(--accent-signal)] hover:underline"
+          >
+            <span>All {allPublications.length} publications →</span>
+          </a>
+        </div>
+
+        <div class="space-y-1">
+          {featuredPublications.map((pub) => (
+            <PubRow pub={pub} showYearGutter={true} />
+          ))}
+        </div>
+
+        <div class="pt-2 text-left">
+          <a
+            href={withBase('/publications')}
+            class="inline-block font-mono text-xs text-[var(--accent-signal)] hover:underline"
+          >
+            All {allPublications.length} publications →
+          </a>
+        </div>
+      </section>
+
+      <!-- 4. Building: 2 Featured Projects per §7.1 -->
+      <section id="building" class="space-y-8 scroll-mt-24">
+        <SectionHeading
+          tag="BUILDING"
+          title="Featured Projects"
+          subtitle="Applied computational artifacts, open-source frameworks, and diagnostic tools."
+        />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          {featuredProjects.map((proj) => (
+            <ProjectCard project={proj} compact={true} />
+          ))}
+        </div>
+
+        <div class="pt-2 text-left">
+          <a
+            href={withBase('/projects')}
+            class="inline-block font-mono text-xs text-[var(--accent-signal)] hover:underline"
+          >
+            View all {allProjects.length} projects →
+          </a>
+        </div>
+      </section>
+
+      <!-- 5. Recent: 5 News Items per §7.1 -->
+      <section id="recent" class="space-y-6 scroll-mt-24">
+        <SectionHeading
+          tag="DISPATCHES"
+          title="Recent Updates"
+          subtitle="Chronological log of academic milestones, qualifications, and presentations."
+        />
+
+        <div class="divide-y divide-[var(--border-subtle)]">
+          {recentNews.map((item) => (
+            <DefinitionRow
+              date={formatDate(item.data.date)}
+              title={item.data.text}
+              link={item.data.link}
+            />
+          ))}
+        </div>
+      </section>
+
+      <!-- 6. Contact Strip per §7.1 -->
+      <section id="contact" class="space-y-8 border-t border-[var(--border-subtle)] pt-12 scroll-mt-24">
+        <h2 class="font-display text-[var(--step-4)] text-[var(--text-heading)] leading-tight max-w-[28ch]">
+          Get in touch about {site.researchAreas[0]} or research collaborations.
+        </h2>
+
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <div class="flex items-center gap-2 p-1.5 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+            <span class="font-mono text-xs text-[var(--text-body)] px-2">{site.email}</span>
+            <CopyButton text={site.email} label="Copy Email" />
+          </div>
+
+          <div class="flex items-center gap-3 pl-2">
+            {activeSocials.map((social) => (
+              <a
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-2 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--accent-signal)] transition-colors"
+                title={social.label}
+                aria-label={social.label}
+              >
+                <Icon name={social.key === 'github' ? 'github' : social.key === 'linkedin' ? 'linkedin' : 'academic'} size={16} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initMagneticButtons } from '../scripts/motion';
+  initMagneticButtons();
+  document.addEventListener('astro:page-load', initMagneticButtons);
+</script>
