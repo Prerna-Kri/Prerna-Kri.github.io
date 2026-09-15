@@ -8,7 +8,7 @@ import rehypeKatex from 'rehype-katex';
 // Base path configuration per §3.4:
 // If repository is exactly <username>.github.io or using a custom domain, base should be undefined.
 // For project repository deployment on GitHub Pages (e.g., /Prerna_Website), set base: '/Prerna_Website'.
-const REPO_NAME = 'Prerna_Website';
+const REPO_NAME = 'Prerna-Kri.github.io';
 const GITHUB_USERNAME = 'Prerna-Kri';
 const isUserPage = REPO_NAME.toLowerCase() === `${GITHUB_USERNAME.toLowerCase()}.github.io`;
 

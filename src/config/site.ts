@@ -14,7 +14,7 @@ export const site = {
   tagline: 'Computer vision, deep learning models, and predictive analytics for visual and structured data.', // ≤ 110 chars
   bio: 'PhD researcher in the Department of Data Science and Engineering at IISER Bhopal. Prior background includes an M.Sc. in Mathematics and Computing from Banaras Hindu University and research in computer vision and deep learning. Focuses on practical machine learning applications and visual recognition systems.',
   domain: 'https://Prerna-Kri.github.io',
-  repo: 'Prerna_Website', // base-path logic per §3.4
+  repo: 'Prerna-Kri.github.io', // root user site logic per §3.4
   cvPdf: '/cv.pdf',
   socials: {
     github: 'https://github.com/Prerna-Kri',
