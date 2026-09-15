@@ -33,3 +33,10 @@ All color tokens verified for text (>= 4.5:1) and large text / borders (>= 3:1) 
 - Replaced typical generic card layouts with asymmetric 12-column grid and scientific figure frames.
 - Axis rail mimics precision laboratory instrumentation with real-time section tracking and scroll-progress data ramp.
 - Zero decorative gradient text, zero floating generic shadow cards, zero vanity counters.
+
+## 4. Typography Scale, Color Fidelity & Theme Engine Fixes
+- **Font-Family Name Alignment**: Fontsource declares the variable family as `'Geist Variable'`. Updated font stacks to include both `'Geist Variable'` and `'Geist Sans Variable'` so the true variable font is guaranteed to load rather than falling back to system sans-serif.
+- **Fluid Typography Enforced**: Tailwind CSS v4 arbitrary variable classes (`text-[var(--step-*)]`) were failing to generate font-size rules because Tailwind interprets `text-[var]` as color unless typed. Added explicit fluid typography classes (`.step--1` through `.step-6`) and wildcard substring selectors (`[class*="text-[var(--step-*)"]`) in `src/styles/global.css`. Headline H1 now computes to true fluid 96px display size.
+- **Default Theme Normalization**: Ensured the blocking head script defaults unconditionally to `'dark'` on first visit per §4.3 ("DARK (default)"), preserving the deep navy ink background (`#0A1424`), rather than prematurely switching to light mode via system preference.
+- **Hero Canvas Dynamic Palette**: Canvas particles in `src/scripts/heroField.ts` now observe `data-theme` changes, automatically adapting between `#47DFC6` / `#7C6BFF` in dark mode and high-contrast `--signal-ink` (`#0E9C86`) / `--pulse-ink` (`#5847D6`) in light mode.
+- **Elimination of §4.2 Prohibited Patterns**: Removed tracked-out all-caps monospace eyebrows (`// FOCUS`, etc.) from section headings, replaced middle-dot role strings with natural sentence-case phrasing, removed trailing arrows from links, and removed duplicate labels from the axis rail.
