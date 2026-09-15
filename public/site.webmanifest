@@ -1,0 +1,16 @@
+{
+  "name": "Prerna Kumari — Academic Personal Website",
+  "short_name": "Prerna Kumari",
+  "description": "PhD Research Scholar in Data Science and Engineering at IISER Bhopal.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1424",
+  "theme_color": "#0A1424",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
