@@ -60,8 +60,8 @@ const baseUrl = import.meta.env.BASE_URL;
       (function () {
         try {
           const stored = localStorage.getItem('theme');
-          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-          const theme = stored ? stored : prefersLight ? 'light' : 'dark';
+          // Dark is default theme per §4.3
+          const theme = stored === 'light' ? 'light' : 'dark';
           document.documentElement.setAttribute('data-theme', theme);
           const metaTheme = document.querySelector('meta[name="theme-color"]');
           if (metaTheme) {

@@ -6,20 +6,15 @@ interface Props {
   class?: string;
 }
 
-const { title, subtitle, tag, class: className = '' } = Astro.props;
+const { title, subtitle, class: className = '' } = Astro.props;
 ---
 
-<div class={`space-y-1.5 border-t border-[var(--border-subtle)] pt-6 ${className}`}>
-  {tag && (
-    <div class="font-mono text-xs uppercase tracking-widest text-[var(--accent-signal)]">
-      // {tag}
-    </div>
-  )}
-  <h2 class="font-display text-[var(--step-3)] text-[var(--text-heading)]">
+<div class={`space-y-2 border-t border-subtle pt-6 ${className}`}>
+  <h2 class="font-display step-3 text-heading">
     {title}
   </h2>
   {subtitle && (
-    <p class="text-[var(--step--1)] text-[var(--text-muted)] max-w-[60ch]">
+    <p class="step--1 text-muted max-w-[60ch] leading-relaxed">
       {subtitle}
     </p>
   )}

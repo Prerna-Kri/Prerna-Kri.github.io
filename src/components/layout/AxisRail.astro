@@ -23,11 +23,6 @@ const { sections = [] } = Astro.props;
   class="hidden lg:flex fixed top-28 right-[clamp(1.25rem,4vw,3.5rem)] bottom-28 w-16 z-20 flex-col items-end pointer-events-none select-none font-mono text-[var(--step--1)] text-[var(--text-muted)]"
   aria-hidden="true"
 >
-  <!-- Active section label -->
-  <div class="mb-4 text-right pr-3 font-mono text-xs tracking-wider text-[var(--accent-signal)] opacity-0 transition-opacity duration-200" id="rail-active-label">
-    [Y-AXIS]
-  </div>
-
   <!-- Vertical Hairline & Progress Track -->
   <div class="relative flex-1 w-[1px] bg-[var(--border-subtle)] mr-2">
     <!-- Scroll Progress Segment -->
@@ -57,8 +52,8 @@ const { sections = [] } = Astro.props;
     </div>
   </div>
 
-  <div class="mt-4 pr-3 text-[9px] text-[var(--text-muted)] tracking-widest uppercase">
-    FIGURE RAIL
+  <div class="mt-4 pr-2 text-[9px] text-[var(--text-muted)] tracking-widest uppercase opacity-70">
+    Y-AXIS
   </div>
 </aside>
 
@@ -66,7 +61,6 @@ const { sections = [] } = Astro.props;
   function setupAxisRail() {
     const mobileProgress = document.getElementById('mobile-progress-bar');
     const railProgress = document.getElementById('rail-progress-segment');
-    const activeLabel = document.getElementById('rail-active-label');
     const tickLines = document.querySelectorAll<HTMLElement>('.tick-line');
     const tickLabels = document.querySelectorAll<HTMLElement>('.tick-label');
 
@@ -83,7 +77,7 @@ const { sections = [] } = Astro.props;
       }
     }
 
-    // Observe sections to activate ticks
+    // Observe sections to activate ticks (§6.2: tick grows from 8px to 16px and label crossfades)
     const observedSections = document.querySelectorAll<HTMLElement>('section[id], article[id]');
     if (observedSections.length > 0 && tickLines.length > 0) {
       const observer = new IntersectionObserver(
@@ -110,10 +104,6 @@ const { sections = [] } = Astro.props;
               if (matchingLabel) {
                 matchingLabel.style.opacity = '1';
                 matchingLabel.style.color = 'var(--accent-signal)';
-                if (activeLabel) {
-                  activeLabel.textContent = matchingLabel.textContent?.trim() || '';
-                  activeLabel.style.opacity = '1';
-                }
               }
             }
           });
